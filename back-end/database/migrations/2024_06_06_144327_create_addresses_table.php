@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('phone', 20)->nullable();
             $table->string('street')->nullable();
-            $table->string('civic_number', 6)->nullable();
+            $table->string('civic_number', 15)->nullable();
             $table->string('city', 50)->nullable();
             $table->string('postal_code', 10)->nullable();
             $table->foreignId('user_id')->constrained();

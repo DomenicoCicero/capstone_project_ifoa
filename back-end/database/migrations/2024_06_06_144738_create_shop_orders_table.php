@@ -21,6 +21,7 @@ return new class extends Migration
             $table->enum('status', ['pending', 'delivered', 'completed', 'cancelled'])->default('pending');
             $table->timestamps();
             $table->foreignId('user_id')->constrained();
+            $table->foreignId('address_id')->constrained();
         });
     }
 

@@ -1,0 +1,301 @@
+// //bootstrap customizzato
+$font-family-sans-serif: "Urbanist";
+$body-color: #161717;
+$main-color: #f48f02;
+$second-color: #325443;
+$third-color: #c34829;
+$my-orange: #f28123;
+$custom-light-green: #c9ce90;
+$another-green: #5fad41;
+$my-grey: #727272;
+$light-grey: #d3d3d3ce;
+
+$link-color: $body-color;
+$component-active-bg: $main-color;
+$focus-ring-opacity: 0.3;
+$focus-ring-color: rgba($another-green, $focus-ring-opacity);
+
+$form-label-margin-bottom: 0;
+
+$alert-border-width: 0;
+$alert-border-radius: 0;
+// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+// 2. Include any default variable overrides here
+
+$custom-theme-colors: (
+  "mainColor": $main-color,
+  "secondColor": $second-color,
+  "thirdColor": $third-color,
+  "myLightGreen": $custom-light-green,
+  "myGrey": $my-grey,
+  "myOrange": $my-orange,
+);
+
+$theme-colors: map-merge($custom-theme-colors, $theme-colors);
+
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+
+// 5. Add additional custom code here
+//Stile dei bottoni
+
+#first-button {
+  color: $white;
+  background-color: $main-color;
+  border: 1px solid $main-color;
+  &:hover {
+    background-color: darken($main-color, 8);
+    border: 1px solid darken($main-color, 8);
+    color: darken($white, 5);
+  }
+  &:active {
+    background-color: #727d27;
+    border: 1px solid #727d27;
+  }
+}
+
+#grey-button {
+  background-color: $light-grey;
+  border: 1px solid $light-grey;
+  &:hover {
+    background-color: darken($light-grey, 8);
+    border: solid 1px darken($light-grey, 8);
+  }
+  &:active {
+    background-color: $my-grey;
+    border: solid 1px $my-grey;
+  }
+}
+//
+.page-404 svg {
+  font-size: 100px;
+}
+//Stile degli Alert
+.alert-error {
+  border-top: solid 10px red;
+}
+.alert-success {
+  border-top: solid 10px green;
+}
+
+.icone-alert {
+  width: 2rem;
+  height: 2rem;
+}
+.message-alert h5 {
+  line-height: 1.5;
+  margin-bottom: 0;
+}
+//Stile Badge
+.badge-on-sale {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 30px 0;
+}
+.badge-text {
+  font-weight: 600;
+  color: white;
+}
+//Stile del Form Registrazione e LogIn
+.form-login-signup {
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 10px;
+}
+.label-of-forms {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  font-size: 14px;
+}
+//stile barra di ricerca
+.search-input {
+  padding: 10px;
+  border: 5px;
+  width: 20px;
+}
+
+//stile pagina dettaglio
+.product-info-box > h1 {
+  font-weight: 600;
+}
+.quantity-field {
+  max-width: 60px;
+}
+.btn-increase:hover {
+  background-color: darker(lightgray);
+  border: 1px solid lightgrey;
+}
+
+.product-data > span {
+  display: block;
+  font-size: 0.9rem;
+  border-top: 1px solid $light-grey;
+  padding: 5px 0;
+}
+
+//stile breadcrumbs
+.breadcrumbs {
+  font-size: 0.85em;
+  margin: 0 0 0.5em;
+  text-transform: uppercase;
+}
+
+.breadcrumbs a {
+  color: $my-grey;
+  text-decoration: none;
+  font-weight: 400;
+}
+.breadcrumbs a:hover {
+  color: $body-color;
+}
+//footer
+.footer-link {
+  display: block;
+  margin-bottom: 0.75rem;
+  text-decoration: none;
+  color: white;
+}
+//pagina info azienda
+.main-title,
+.category-title {
+  font-weight: 900;
+  text-align: center;
+  font-size: 52px;
+}
+.about-wrapper {
+  max-width: 700px;
+}
+.heading-bold h2 {
+  font-weight: 800;
+}
+
+.my-brand-image {
+  height: 500px;
+  background-color: #ddd;
+  object-position: center;
+  object-fit: cover;
+  width: 100%;
+}
+
+//pagina prodotti
+.nav-pills .nav-link {
+  border: 2px solid $body-color;
+  margin: 15px;
+  color: #323232;
+  padding: 8px 20px;
+  border-radius: 25px;
+}
+.nav-pills .nav-link.active {
+  border: 2px solid $main-color;
+  background-color: $main-color;
+  color: #fff;
+  font-weight: 700;
+}
+
+//----footeer icons style
+.styled-icon {
+  font-size: 1.25rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0 3px 0px;
+}
+.icon-box p {
+  margin-bottom: 0.25rem;
+}
+.icon-circle {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  text-align: center;
+}
+.icon-circle:hover {
+  background: rgba(0, 0, 0, 0.2);
+
+  &:active {
+    background: rgba(0, 0, 0, 0.4);
+  }
+}
+.social-btn {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: $main-color;
+  color: white;
+  text-align: center;
+}
+//stile nav
+.cart-number {
+  position: absolute;
+  top: -4px;
+  right: -8px;
+  z-index: 1;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  color: #fff;
+  text-align: center;
+  font-weight: 600;
+  font-size: 10px;
+  line-height: 19px;
+}
+
+.navbar-brand {
+  margin-right: 0;
+}
+
+.navbar {
+  box-shadow: 0 3px 8px rgb(0, 0, 0, 20%);
+}
+
+.nav-link {
+  color: #727272;
+  font-weight: 600;
+}
+.nav-link:hover {
+  color: $body-color;
+}
+.navbar-toggler:focus,
+.btn-close:focus {
+  box-shadow: none;
+  outline: none;
+}
+// stile dropdown utente quando ha fatto accesso
+#dropdown-custom-1 {
+  background-color: transparent;
+  color: #161717;
+  border: 0;
+  padding: 0;
+}
+#dropdown-custom-1::after {
+  content: none;
+}
+.dropdown-item svg {
+  font-size: 1rem;
+  width: 1rem;
+  height: 1rem;
+  padding: 0 0 3px 3px;
+}
+
+//mobile menu
+.show-on-mobile {
+  display: none;
+}
+.green-divider {
+  color: $main-color;
+  opacity: 1;
+  border: 2px solid;
+}
+.list-group-item {
+  padding: 0 20px;
+}
+//queries per navbar
+@media screen and (max-width: 991.98px) {
+  .show-on-mobile {
+    display: block;
+  }
+  .hide-on-mobile {
+    display: none;
+  }
+}
