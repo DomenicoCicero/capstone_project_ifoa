@@ -18,11 +18,6 @@ class Address extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function deliveries(): HasMany
-    {
-        return $this->hasMany(Delivery::class);
-    }
-
     public function shop_orders(): HasMany
     {
         return $this->hasMany(ShopOrder::class);

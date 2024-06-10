@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('total_price_discounted', 10, 2)->nullable();
             $table->enum('payment_method', ['card', 'cash'])->default('card');
             $table->enum('delivery_method', ['home_delivery', 'store_pickup'])->default('home_delivery');
+            $table->enum('delivery_status', ['scheduled', 'in_transit', 'delivered', 'cancelled'])->default('scheduled');
             $table->enum('status', ['pending', 'delivered', 'completed', 'cancelled'])->default('pending');
             $table->timestamps();
             $table->foreignId('user_id')->constrained();

@@ -66,6 +66,7 @@ const Register = () => {
                     value={formData.name}
                   />
                 </InputGroup>
+                {errors && errors.name && <div className="error text-danger d-block">{errors.name}</div>}
               </Form.Group>
               <Form.Group className="mb-2" controlId="formGroupEmail">
                 <Form.Label className="label-of-forms">Indirizzo E-mail</Form.Label>
@@ -87,6 +88,7 @@ const Register = () => {
                     value={formData.email}
                   />
                 </InputGroup>
+                {errors && errors.email && <div className="error text-danger">{errors.email}</div>}
               </Form.Group>
               <Form.Group className="mb-2" controlId="formGroupPassword">
                 <Form.Label className="label-of-forms">Password</Form.Label>
@@ -108,6 +110,7 @@ const Register = () => {
                     value={formData.password}
                   />
                 </InputGroup>
+                {errors && errors.password && <div className="error text-danger">{errors.password}</div>}
               </Form.Group>
               <Form.Group className="mb-2" controlId="formGroupConfirmPassword">
                 <Form.Label className="label-of-forms">Conferma Password</Form.Label>

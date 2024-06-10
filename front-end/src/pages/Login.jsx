@@ -18,6 +18,8 @@ const Login = () => {
     password: "",
   });
 
+  const [errors, setErrors] = useState(null);
+
   const submitLogin = e => {
     e.preventDefault();
     axios
@@ -27,6 +29,10 @@ const Login = () => {
       .then(response => {
         console.log(response.data);
         dispatch(login(response.data));
+      })
+      .catch(err => {
+        console.log(err.response.data.errors);
+        setErrors(err.response.data.errors);
       });
   };
   return (
@@ -56,6 +62,7 @@ const Login = () => {
                     value={formData.email}
                   />
                 </InputGroup>
+                {errors && errors.email && <div className="error text-danger">{errors.email}</div>}
               </Form.Group>
               <Form.Group className="mb-3" controlId="formGroupPassword">
                 <Form.Label className="label-of-forms">Password</Form.Label>
@@ -77,6 +84,7 @@ const Login = () => {
                     value={formData.password}
                   />
                 </InputGroup>
+                {errors && errors.password && <div className="error text-danger">{errors.password}</div>}
               </Form.Group>
               <div className="d-grid">
                 <Button type="submit" id="first-button" className=" my-4 " size="lg">

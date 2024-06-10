@@ -26,11 +26,6 @@ class ShopOrder extends Model
         return $this->hasMany(Payment::class);
     }
 
-    public function delivery(): BelongsTo
-    {
-        return $this->belongsTo(Delivery::class);
-    }
-
     public function address(): BelongsTo
     {
         return $this->belongsTo(Address::class);
