@@ -11,10 +11,16 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function getProductsHomePage()
     {
         $products = Product::with('category')->get();
         return $products;
+    }
+
+    public function getProductsProductsPage()
+    {
+        $products = Product::with('category')->paginate(20);
+        return response()->json($products);
     }
 
     /**

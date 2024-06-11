@@ -13,6 +13,8 @@ import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { login } from "./redux/actions";
 import HomePage from "./pages/HomePage";
+import MyFooter from "./components/MyFooter";
+import ProductsPage from "./pages/ProductsPage";
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -36,10 +38,12 @@ function App() {
         <div className="container">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/products" element={<ProductsPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
           </Routes>
         </div>
+        <MyFooter />
       </BrowserRouter>
     )
   );

@@ -3,9 +3,14 @@ import MyCarousel from "../components/MyCarousel";
 import { useDispatch, useSelector } from "react-redux";
 import { getProducts } from "../redux/actions";
 import Spinner from "react-bootstrap/Spinner";
+import Alert from "react-bootstrap/Alert";
 
 const HomePage = () => {
   const dispatch = useDispatch();
+
+  const user = useSelector(state => {
+    return state.user.user;
+  });
 
   const products = useSelector(state => {
     return state.products.products;
@@ -55,6 +60,23 @@ const HomePage = () => {
 
   return (
     <>
+      {categories.length > 0 && (
+        <div className="text-center mt-3">
+          <img
+            src="https://static-00.iconduck.com/assets.00/shopping-cart-emoji-256x256-uz4p7t7e.png"
+            alt="logo"
+            className="w-25"
+          />
+          <h1 className="text-mainColor">Supermercato Online</h1>
+        </div>
+      )}
+      {categories.length > 0 && !user && (
+        <div className="text-center mt-3">
+          <Alert variant="success" className="custom-alert">
+            <Alert.Heading>Effettua l'accesso per scoprire di più!</Alert.Heading>
+          </Alert>
+        </div>
+      )}
       {categories.length === 0 && (
         <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
           <div className="text-center">

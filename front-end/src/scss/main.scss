@@ -2,7 +2,7 @@
 $font-family-sans-serif: "Urbanist";
 $body-color: #161717;
 $main-color: #f48f02;
-$second-color: #325443;
+$second-color: #c7190c;
 $third-color: #c34829;
 $my-orange: #f28123;
 $custom-light-green: #c9ce90;
@@ -306,4 +306,33 @@ $theme-colors: map-merge($custom-theme-colors, $theme-colors);
 
 .slick-prev:before {
   color: $main-color !important;
+}
+
+.custom-alert {
+  background-color: $main-color !important;
+  border-color: darken($main-color, 10%) !important; // Opzionale: Scurisce leggermente il colore per il bordo
+  color: white !important; // Opzionale: Imposta il colore del testo in bianco per contrasto
+}
+
+.custom-pagination {
+  .page-item {
+    &.active .page-link {
+      background-color: $main-color;
+      border-color: $main-color;
+      color: white;
+    }
+    &:hover .page-link {
+      background-color: lighten($main-color, 10%);
+      border-color: lighten($main-color, 10%);
+      color: white;
+    }
+    .page-link {
+      color: $main-color;
+    }
+  }
+}
+
+.custom-pagination .page-item .page-link:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }

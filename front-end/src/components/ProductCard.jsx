@@ -21,7 +21,7 @@ const ProductCard = props => {
           <span className="text-secondary">{props.product.category.name}</span>
         </Card.Text>
 
-        <Card.Text className="fw-normal">{props.product.description.substring(0, 85) + "..."}</Card.Text>
+        <Card.Text className="fw-normal">{props.product.description.substring(0, 65) + "..."}</Card.Text>
         <Card.Text className="d-flex mb-4">
           <span>
             <IoMdHeartEmpty className="fs-4" />

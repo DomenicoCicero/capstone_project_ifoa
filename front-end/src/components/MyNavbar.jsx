@@ -17,12 +17,12 @@ const MyNavbar = () => {
     <Navbar expand="lg">
       <Container fluid className="mx-2">
         <Navbar.Toggle aria-controls="offcanvasNavbar-expand-lg" className="border-0" />
-        <Navbar.Brand className="text-center">
+        <Navbar.Brand className="text-center me-0">
           <Link to={"/"}>
             <img
-              src="https://websitedemos.net/organic-shop-02/wp-content/uploads/sites/465/2019/06/organic-store-logo5.svg"
+              src="https://static-00.iconduck.com/assets.00/shopping-cart-emoji-256x256-uz4p7t7e.png"
               alt="logo"
-              className="w-75"
+              className="w-25"
             />
           </Link>
         </Navbar.Brand>
@@ -39,7 +39,7 @@ const MyNavbar = () => {
               <Link to={"/"} className=" ms-2 nav-link">
                 HOME
               </Link>
-              <Link to={"/azienda"} className="ms-2  nav-link">
+              <Link to={"/products"} className="ms-2  nav-link">
                 PRODOTTI
               </Link>
               <Link to={"/"} className=" ms-2 nav-link">
