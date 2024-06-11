@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Models\Category;
 
 class ProductController extends Controller
 {
@@ -20,6 +21,15 @@ class ProductController extends Controller
     public function getProductsProductsPage()
     {
         $products = Product::with('category')->paginate(20);
+        return response()->json($products);
+    }
+
+    public function getProductsByCategory($categoryId)
+    {
+        $categoryId = intval($categoryId);
+
+        $products = Product::where('category_id', $categoryId)->with('category')->paginate(20);
+    
         return response()->json($products);
     }
 

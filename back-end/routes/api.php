@@ -14,5 +14,6 @@ Route::get("/categories", [CategoryController::class, 'index']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get("/products-page", [ProductController::class, 'getProductsProductsPage']);
+    Route::get("/products/category/{categoryId}", [ProductController::class, 'getProductsByCategory']);
 
 });

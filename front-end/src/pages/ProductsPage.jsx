@@ -15,8 +15,10 @@ const ProductsPage = () => {
   const [categories, setCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  // const [currentPageFilteredProduct, setCurrentPageFilteredProduct] = useState(1);
+  // const [totalPagesFilteredProduct, setTotalPagesFilteredProduct] = useState(1);
 
-  //   const [categorySelected, setCategorySelected] = useState("");
+  const [categoryName, setCategoryName] = useState("Tutti i Prodotti");
 
   const [show, setShow] = useState(false);
 
@@ -27,27 +29,26 @@ const ProductsPage = () => {
     setShow(true);
   };
 
-  // per filtrare le categorie chiamare api senza pagination e fare setProducts
-  //   const getProducts = () => {
-  //     fetch(`/api/products-page?page=${currentPage}`)
-  //       .then(response => {
-  //         if (response.ok) {
-  //           return response.json();
-  //         } else {
-  //           throw new Error("errore nel reperimento dei dati");
-  //         }
-  //       })
-  //       .then(data => {
-  //         console.log(data);
-  //         const filteredProducts =
-  //           categorySelected !== "" ? data.data.filter(item => item.category.name === categorySelected) : data.data;
-  //         setProducts(filteredProducts);
-  //         setTotalPages(data.last_page);
-  //       })
-  //       .catch(err => {
-  //         console.log(err);
-  //       });
-  //   };
+  const getProductsByCategorySelected = categoryId => {
+    fetch(`/api/products/category/${categoryId}`)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("errore nel reperimento dei dati");
+        }
+      })
+      .then(data => {
+        console.log(data);
+        setProducts(data.data);
+        setCategoryName(data.data[0].category.name);
+        // setTotalPagesFilteredProduct(data.last_page);
+        setShow(false);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   const getProducts = () => {
     fetch(`/api/products-page?page=${currentPage}`)
@@ -62,6 +63,7 @@ const ProductsPage = () => {
         console.log(data);
         setProducts(data.data);
         setTotalPages(data.last_page);
+        setShow(false);
       })
       .catch(err => {
         console.log(err);
@@ -89,12 +91,16 @@ const ProductsPage = () => {
   useEffect(() => {
     getProducts();
     getAllCategories();
+    // if (categoryName !== "Tutti i Prodotti") {
+    //   let findCategory = categories.filter(item => item.name === categoryName);
+    //   getProductsByCategorySelected(findCategory.id);
+    // }
   }, [currentPage]);
 
   return (
     <>
       <Container>
-        <h1 className="text-center my-4">Tutti i prodotti</h1>
+        <h1 className="text-center my-4">{categoryName}</h1>
         <div className="my-4">
           <Button id="first-button" onClick={handleShow}>
             <GiHamburgerMenu /> Vedi le categorie
@@ -106,13 +112,23 @@ const ProductsPage = () => {
             </Offcanvas.Header>
             <Offcanvas.Body>
               <ListGroup>
+                <ListGroup.Item
+                  className="mb-3 bg-mainColor text-white"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    getProducts();
+                    setCategoryName("Tutti i Prodotti");
+                  }}
+                >
+                  Tutti i Prodotti
+                </ListGroup.Item>
                 {categories.map((category, idx) => {
                   return (
                     <ListGroup.Item
                       key={idx}
                       className="mb-3 bg-mainColor text-white"
                       style={{ cursor: "pointer" }}
-                      //   onClick={() => setCategorySelected(category.name)}
+                      onClick={() => getProductsByCategorySelected(category.id)}
                     >
                       {category.name}
                     </ListGroup.Item>
@@ -138,7 +154,7 @@ const ProductsPage = () => {
             );
           })}
         </Row>
-        {products.length > 0 && (
+        {products.length > 0 && categoryName === "Tutti i Prodotti" && (
           <Row className="mt-5">
             <Pagination className="justify-content-center custom-pagination">
               <Pagination.First
@@ -208,6 +224,77 @@ const ProductsPage = () => {
             </Pagination>
           </Row>
         )}
+
+        {/* {products.length > 0 && categoryName !== "Tutti i Prodotti" && (
+          <Row className="mt-5">
+            <Pagination className="justify-content-center custom-pagination">
+              <Pagination.First
+                onClick={() => {
+                  setCurrentPageFilteredProduct(1);
+                }}
+              />
+              <Pagination.Prev
+                onClick={() => {
+                  if (currentPageFilteredProduct > 1) {
+                    setCurrentPageFilteredProduct(currentPageFilteredProduct - 1);
+                  }
+                }}
+              />
+
+              {currentPageFilteredProduct === totalPagesFilteredProduct && totalPagesFilteredProduct > 2 && (
+                <Pagination.Item
+                  onClick={() => {
+                    setCurrentPageFilteredProduct(currentPageFilteredProduct - 2);
+                  }}
+                >
+                  {currentPageFilteredProduct - 2}
+                </Pagination.Item>
+              )}
+              {currentPageFilteredProduct > 1 && (
+                <Pagination.Item
+                  onClick={() => {
+                    setCurrentPageFilteredProduct(currentPageFilteredProduct - 1);
+                  }}
+                >
+                  {currentPageFilteredProduct - 1}
+                </Pagination.Item>
+              )}
+              <Pagination.Item active>{currentPageFilteredProduct}</Pagination.Item>
+              {currentPageFilteredProduct !== totalPagesFilteredProduct && (
+                <Pagination.Item
+                  onClick={() => {
+                    setCurrentPageFilteredProduct(currentPageFilteredProduct + 1);
+                  }}
+                >
+                  {currentPageFilteredProduct + 1}
+                </Pagination.Item>
+              )}
+
+              {currentPageFilteredProduct === 1 && totalPagesFilteredProduct > 2 && (
+                <Pagination.Item
+                  onClick={() => {
+                    setCurrentPageFilteredProduct(currentPageFilteredProduct + 2);
+                  }}
+                >
+                  {currentPageFilteredProduct + 2}
+                </Pagination.Item>
+              )}
+
+              <Pagination.Next
+                onClick={() => {
+                  if (currentPageFilteredProduct !== totalPagesFilteredProduct) {
+                    setCurrentPageFilteredProduct(currentPageFilteredProduct + 1);
+                  }
+                }}
+              />
+              <Pagination.Last
+                onClick={() => {
+                  setCurrentPageFilteredProduct(totalPagesFilteredProduct);
+                }}
+              />
+            </Pagination>
+          </Row>
+        )} */}
       </Container>
     </>
   );
