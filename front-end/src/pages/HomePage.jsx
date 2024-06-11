@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import MyCarousel from "../components/MyCarousel";
 import { useDispatch, useSelector } from "react-redux";
 import { getProducts } from "../redux/actions";
+import Spinner from "react-bootstrap/Spinner";
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -11,6 +12,7 @@ const HomePage = () => {
   });
 
   const [categories, setCategories] = useState([]);
+  const productsOnSale = products.filter(item => item.discounted === 1);
 
   const createdArrayOfObjCategories = arr => {
     let newArray = [];
@@ -53,6 +55,15 @@ const HomePage = () => {
 
   return (
     <>
+      {categories.length === 0 && (
+        <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+          <div className="text-center">
+            <Spinner animation="grow" variant="mainColor" />
+          </div>
+        </div>
+      )}
+      {categories.length > 0 && <MyCarousel category={"Prodotti in Offerta"} products={productsOnSale} />}
+
       {categories.map((category, idx) => {
         return (
           <div key={idx}>

@@ -1,13 +1,13 @@
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import { LuStar } from "react-icons/lu";
 import { LuShoppingCart } from "react-icons/lu";
+import { IoMdHeartEmpty } from "react-icons/io";
+import { IoMdHeart } from "react-icons/io";
 
 const ProductCard = props => {
   return (
     <Card>
       <Card.Img variant="top" src={props.product.image_url} className="cursor-pointer card-border" />
-      {/* !!!!BADGE DA METTERE SOLO PER PRODOTTI IN OFFERTA */}
       {props.product.discounted === 1 && (
         <div className="badge-on-sale bg-thirdColor px-3">
           <span className="badge-text">In offerta!</span>
@@ -23,11 +23,17 @@ const ProductCard = props => {
 
         <Card.Text className="fw-normal">{props.product.description.substring(0, 85) + "..."}</Card.Text>
         <Card.Text className="d-flex mb-4">
+          <span>
+            <IoMdHeartEmpty className="fs-4" />
+          </span>
+          {/* <span>
+            <IoMdHeart className="fs-4" />
+          </span> */}
           {props.product.discounted === 1 && (
-            <div className="ms-auto">
+            <span className="ms-auto">
               <span className="fw-semibold text-muted text-decoration-line-through">{props.product.price}&euro;</span>
               <span className="text-center fw-bold  ms-3">{props.product.price_discounted}&euro;</span>
-            </div>
+            </span>
           )}
           {props.product.discounted === 0 && (
             <span className="text-center fw-bold ms-3 ms-auto">{props.product.price}&euro;</span>

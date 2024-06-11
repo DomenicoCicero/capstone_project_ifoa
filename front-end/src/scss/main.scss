@@ -299,3 +299,11 @@ $theme-colors: map-merge($custom-theme-colors, $theme-colors);
     display: none;
   }
 }
+
+.slick-next:before {
+  color: $main-color !important;
+}
+
+.slick-prev:before {
+  color: $main-color !important;
+}

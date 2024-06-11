@@ -12681,5 +12681,12 @@ textarea.form-control-lg {
     display: none;
   }
 }
+.slick-next:before {
+  color: #f48f02 !important;
+}
+
+.slick-prev:before {
+  color: #f48f02 !important;
+}
 
 /*# sourceMappingURL=main.css.map */
