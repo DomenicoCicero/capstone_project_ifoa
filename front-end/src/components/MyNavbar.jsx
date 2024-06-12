@@ -42,10 +42,10 @@ const MyNavbar = () => {
               <Link to={"/products"} className="ms-2  nav-link">
                 PRODOTTI
               </Link>
-              <Link to={"/"} className=" ms-2 nav-link">
+              <Link to={"/about"} className=" ms-2 nav-link">
                 CHI SIAMO
               </Link>
-              <Link to={"/contact"} className=" ms-2 nav-link">
+              <Link to={"/contacts"} className=" ms-2 nav-link">
                 CONTATTI
               </Link>
               {/* SOLO nel menu mobile e tablet */}

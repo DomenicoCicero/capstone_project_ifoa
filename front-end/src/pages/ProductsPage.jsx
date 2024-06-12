@@ -10,15 +10,20 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import { GiHamburgerMenu } from "react-icons/gi";
 import ListGroup from "react-bootstrap/ListGroup";
 
-const ProductsPage = () => {
+const Prova = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  // const [currentPageFilteredProduct, setCurrentPageFilteredProduct] = useState(1);
-  // const [totalPagesFilteredProduct, setTotalPagesFilteredProduct] = useState(1);
 
-  const [categoryName, setCategoryName] = useState("Tutti i Prodotti");
+  const [currentPage, setCurrentPage] = useState({
+    categorySelected: "Tutti i Prodotti",
+    categoryIdSelected: null,
+    n: 1,
+  });
+
+  const [totalPages, setTotalPages] = useState({
+    categorySelected: "Tutti i Prodotti",
+    n: null,
+  });
 
   const [show, setShow] = useState(false);
 
@@ -29,8 +34,8 @@ const ProductsPage = () => {
     setShow(true);
   };
 
-  const getProductsByCategorySelected = categoryId => {
-    fetch(`/api/products/category/${categoryId}`)
+  const getProductsByCategorySelected = () => {
+    fetch(`/api/products/category/${currentPage.categoryIdSelected}?page=${currentPage.n}`)
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -41,8 +46,10 @@ const ProductsPage = () => {
       .then(data => {
         console.log(data);
         setProducts(data.data);
-        setCategoryName(data.data[0].category.name);
-        // setTotalPagesFilteredProduct(data.last_page);
+        setTotalPages({
+          categorySelected: currentPage.categorySelected,
+          n: data.last_page,
+        });
         setShow(false);
       })
       .catch(err => {
@@ -51,7 +58,7 @@ const ProductsPage = () => {
   };
 
   const getProducts = () => {
-    fetch(`/api/products-page?page=${currentPage}`)
+    fetch(`/api/products-page?page=${currentPage.n}`)
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -62,7 +69,10 @@ const ProductsPage = () => {
       .then(data => {
         console.log(data);
         setProducts(data.data);
-        setTotalPages(data.last_page);
+        setTotalPages({
+          categorySelected: currentPage.categorySelected,
+          n: data.last_page,
+        });
         setShow(false);
       })
       .catch(err => {
@@ -89,18 +99,19 @@ const ProductsPage = () => {
   };
 
   useEffect(() => {
-    getProducts();
     getAllCategories();
-    // if (categoryName !== "Tutti i Prodotti") {
-    //   let findCategory = categories.filter(item => item.name === categoryName);
-    //   getProductsByCategorySelected(findCategory.id);
-    // }
+    if (currentPage.categorySelected === "Tutti i Prodotti") {
+      getProducts();
+    }
+    if (currentPage.categorySelected !== "Tutti i Prodotti") {
+      getProductsByCategorySelected();
+    }
   }, [currentPage]);
 
   return (
     <>
       <Container>
-        <h1 className="text-center my-4">{categoryName}</h1>
+        <h1 className="text-center my-4">{currentPage.categorySelected}</h1>
         <div className="my-4">
           <Button id="first-button" onClick={handleShow}>
             <GiHamburgerMenu /> Vedi le categorie
@@ -116,8 +127,11 @@ const ProductsPage = () => {
                   className="mb-3 bg-mainColor text-white"
                   style={{ cursor: "pointer" }}
                   onClick={() => {
-                    getProducts();
-                    setCategoryName("Tutti i Prodotti");
+                    setCurrentPage({
+                      categorySelected: "Tutti i Prodotti",
+                      categoryIdSelected: null,
+                      n: 1,
+                    });
                   }}
                 >
                   Tutti i Prodotti
@@ -128,7 +142,13 @@ const ProductsPage = () => {
                       key={idx}
                       className="mb-3 bg-mainColor text-white"
                       style={{ cursor: "pointer" }}
-                      onClick={() => getProductsByCategorySelected(category.id)}
+                      onClick={() => {
+                        setCurrentPage({
+                          categorySelected: category.name,
+                          categoryIdSelected: category.id,
+                          n: 1,
+                        });
+                      }}
                     >
                       {category.name}
                     </ListGroup.Item>
@@ -154,150 +174,103 @@ const ProductsPage = () => {
             );
           })}
         </Row>
-        {products.length > 0 && categoryName === "Tutti i Prodotti" && (
+        {products.length > 0 && (
           <Row className="mt-5">
             <Pagination className="justify-content-center custom-pagination">
               <Pagination.First
                 onClick={() => {
-                  setCurrentPage(1);
+                  setCurrentPage(prevState => ({
+                    ...prevState,
+                    n: 1,
+                  }));
                 }}
               />
               <Pagination.Prev
                 onClick={() => {
-                  if (currentPage > 1) {
-                    setCurrentPage(currentPage - 1);
+                  if (currentPage.n > 1) {
+                    setCurrentPage(prevState => ({
+                      ...prevState,
+                      n: currentPage.n - 1,
+                    }));
                   }
                 }}
               />
 
-              {currentPage === totalPages && (
+              {currentPage.n === totalPages.n && totalPages.n > 2 && (
                 <Pagination.Item
                   onClick={() => {
-                    setCurrentPage(currentPage - 2);
+                    setCurrentPage(prevState => ({
+                      ...prevState,
+                      n: currentPage.n - 2,
+                    }));
                   }}
                 >
-                  {currentPage - 2}
+                  {currentPage.n - 2}
                 </Pagination.Item>
               )}
-              {currentPage > 1 && (
+              {currentPage.n > 1 && (
                 <Pagination.Item
                   onClick={() => {
-                    setCurrentPage(currentPage - 1);
+                    setCurrentPage(prevState => ({
+                      ...prevState,
+                      n: currentPage.n - 1,
+                    }));
                   }}
                 >
-                  {currentPage - 1}
+                  {currentPage.n - 1}
                 </Pagination.Item>
               )}
-              <Pagination.Item active>{currentPage}</Pagination.Item>
-              {currentPage !== totalPages && (
+              <Pagination.Item active>{currentPage.n}</Pagination.Item>
+              {currentPage.n !== totalPages.n && (
                 <Pagination.Item
                   onClick={() => {
-                    setCurrentPage(currentPage + 1);
+                    setCurrentPage(prevState => ({
+                      ...prevState,
+                      n: currentPage.n + 1,
+                    }));
                   }}
                 >
-                  {currentPage + 1}
+                  {currentPage.n + 1}
                 </Pagination.Item>
               )}
 
-              {currentPage === 1 && (
+              {currentPage.n === 1 && totalPages.n > 2 && (
                 <Pagination.Item
                   onClick={() => {
-                    setCurrentPage(currentPage + 2);
+                    setCurrentPage(prevState => ({
+                      ...prevState,
+                      n: currentPage.n + 2,
+                    }));
                   }}
                 >
-                  {currentPage + 2}
+                  {currentPage.n + 2}
                 </Pagination.Item>
               )}
 
               <Pagination.Next
                 onClick={() => {
-                  if (currentPage !== totalPages) {
-                    setCurrentPage(currentPage + 1);
+                  if (currentPage.n !== totalPages.n) {
+                    setCurrentPage(prevState => ({
+                      ...prevState,
+                      n: currentPage.n + 1,
+                    }));
                   }
                 }}
               />
               <Pagination.Last
                 onClick={() => {
-                  setCurrentPage(totalPages);
+                  setCurrentPage(prevState => ({
+                    ...prevState,
+                    n: totalPages.n,
+                  }));
                 }}
               />
             </Pagination>
           </Row>
         )}
-
-        {/* {products.length > 0 && categoryName !== "Tutti i Prodotti" && (
-          <Row className="mt-5">
-            <Pagination className="justify-content-center custom-pagination">
-              <Pagination.First
-                onClick={() => {
-                  setCurrentPageFilteredProduct(1);
-                }}
-              />
-              <Pagination.Prev
-                onClick={() => {
-                  if (currentPageFilteredProduct > 1) {
-                    setCurrentPageFilteredProduct(currentPageFilteredProduct - 1);
-                  }
-                }}
-              />
-
-              {currentPageFilteredProduct === totalPagesFilteredProduct && totalPagesFilteredProduct > 2 && (
-                <Pagination.Item
-                  onClick={() => {
-                    setCurrentPageFilteredProduct(currentPageFilteredProduct - 2);
-                  }}
-                >
-                  {currentPageFilteredProduct - 2}
-                </Pagination.Item>
-              )}
-              {currentPageFilteredProduct > 1 && (
-                <Pagination.Item
-                  onClick={() => {
-                    setCurrentPageFilteredProduct(currentPageFilteredProduct - 1);
-                  }}
-                >
-                  {currentPageFilteredProduct - 1}
-                </Pagination.Item>
-              )}
-              <Pagination.Item active>{currentPageFilteredProduct}</Pagination.Item>
-              {currentPageFilteredProduct !== totalPagesFilteredProduct && (
-                <Pagination.Item
-                  onClick={() => {
-                    setCurrentPageFilteredProduct(currentPageFilteredProduct + 1);
-                  }}
-                >
-                  {currentPageFilteredProduct + 1}
-                </Pagination.Item>
-              )}
-
-              {currentPageFilteredProduct === 1 && totalPagesFilteredProduct > 2 && (
-                <Pagination.Item
-                  onClick={() => {
-                    setCurrentPageFilteredProduct(currentPageFilteredProduct + 2);
-                  }}
-                >
-                  {currentPageFilteredProduct + 2}
-                </Pagination.Item>
-              )}
-
-              <Pagination.Next
-                onClick={() => {
-                  if (currentPageFilteredProduct !== totalPagesFilteredProduct) {
-                    setCurrentPageFilteredProduct(currentPageFilteredProduct + 1);
-                  }
-                }}
-              />
-              <Pagination.Last
-                onClick={() => {
-                  setCurrentPageFilteredProduct(totalPagesFilteredProduct);
-                }}
-              />
-            </Pagination>
-          </Row>
-        )} */}
       </Container>
     </>
   );
 };
 
-export default ProductsPage;
+export default Prova;

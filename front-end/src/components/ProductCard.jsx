@@ -6,7 +6,7 @@ import { IoMdHeart } from "react-icons/io";
 
 const ProductCard = props => {
   return (
-    <Card>
+    <Card className="h-100">
       <Card.Img variant="top" src={props.product.image_url} className="cursor-pointer card-border" />
       {props.product.discounted === 1 && (
         <div className="badge-on-sale bg-thirdColor px-3">
@@ -21,7 +21,11 @@ const ProductCard = props => {
           <span className="text-secondary">{props.product.category.name}</span>
         </Card.Text>
 
-        <Card.Text className="fw-normal">{props.product.description.substring(0, 65) + "..."}</Card.Text>
+        <Card.Text className="fw-normal">
+          {props.product.description.length > 68
+            ? props.product.description.substring(0, 65) + "..."
+            : props.product.description}
+        </Card.Text>
         <Card.Text className="d-flex mb-4">
           <span>
             <IoMdHeartEmpty className="fs-4" />
