@@ -3,8 +3,10 @@ import Button from "react-bootstrap/Button";
 import { LuShoppingCart } from "react-icons/lu";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { IoMdHeart } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 
 const ProductCard = props => {
+  const navigate = useNavigate();
   return (
     <Card className="h-100">
       <Card.Img variant="top" src={props.product.image_url} className="cursor-pointer card-border" />
@@ -48,7 +50,7 @@ const ProductCard = props => {
             type="button"
             variant="outline-dark"
             className="secondary-button col-9"
-            //   onClick={() => navigate(`product/${props.product.id}`)}
+            onClick={() => navigate(`/products/${props.product.id}`)}
           >
             Vedi dettagli
           </Button>

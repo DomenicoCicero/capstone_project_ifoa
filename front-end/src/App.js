@@ -17,6 +17,7 @@ import MyFooter from "./components/MyFooter";
 import ProductsPage from "./pages/ProductsPage";
 import AboutUs from "./pages/AboutUs";
 import Contacts from "./pages/Contacts";
+import ProductDetails from "./pages/ProductDetails";
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -41,6 +42,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/products" element={<ProductsPage />} />
+            <Route path="/products/:id" element={<ProductDetails />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/contacts" element={<Contacts />} />
             <Route path="/login" element={<Login />} />

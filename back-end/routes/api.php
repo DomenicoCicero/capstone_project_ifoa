@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -15,5 +16,9 @@ Route::get("/categories", [CategoryController::class, 'index']);
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get("/products-page", [ProductController::class, 'getProductsProductsPage']);
     Route::get("/products/category/{categoryId}", [ProductController::class, 'getProductsByCategory']);
+    Route::get("/products/search", [ProductController::class, 'searchProducts']);
+    Route::get("/products/{productId}", [ProductController::class, 'getProductDetails']);
+
+    // Route::post('/send-email', [ContactController::class, 'sendEmail']);
 
 });

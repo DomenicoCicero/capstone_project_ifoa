@@ -6,11 +6,12 @@ import Col from "react-bootstrap/Col";
 import Pagination from "react-bootstrap/Pagination";
 import Spinner from "react-bootstrap/Spinner";
 import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { GiHamburgerMenu } from "react-icons/gi";
 import ListGroup from "react-bootstrap/ListGroup";
 
-const Prova = () => {
+const ProductsPage = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
 
@@ -20,10 +21,8 @@ const Prova = () => {
     n: 1,
   });
 
-  const [totalPages, setTotalPages] = useState({
-    categorySelected: "Tutti i Prodotti",
-    n: null,
-  });
+  const [totalPages, setTotalPages] = useState(null);
+  const [query, setQuery] = useState("");
 
   const [show, setShow] = useState(false);
 
@@ -46,10 +45,7 @@ const Prova = () => {
       .then(data => {
         console.log(data);
         setProducts(data.data);
-        setTotalPages({
-          categorySelected: currentPage.categorySelected,
-          n: data.last_page,
-        });
+        setTotalPages(data.last_page);
         setShow(false);
       })
       .catch(err => {
@@ -69,10 +65,7 @@ const Prova = () => {
       .then(data => {
         console.log(data);
         setProducts(data.data);
-        setTotalPages({
-          categorySelected: currentPage.categorySelected,
-          n: data.last_page,
-        });
+        setTotalPages(data.last_page);
         setShow(false);
       })
       .catch(err => {
@@ -98,12 +91,32 @@ const Prova = () => {
       });
   };
 
+  const searchProducts = () => {
+    fetch(`/api/products/search?q=${query}&page=${currentPage.n}`)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Errore nel reperimento dei dati");
+        }
+      })
+      .then(data => {
+        console.log(data);
+        setProducts(data.data);
+        setTotalPages(data.last_page);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     getAllCategories();
     if (currentPage.categorySelected === "Tutti i Prodotti") {
       getProducts();
-    }
-    if (currentPage.categorySelected !== "Tutti i Prodotti") {
+    } else if (currentPage.categorySelected === "Risultati Ricerca") {
+      searchProducts();
+    } else {
       getProductsByCategorySelected();
     }
   }, [currentPage]);
@@ -111,59 +124,99 @@ const Prova = () => {
   return (
     <>
       <Container>
-        <h1 className="text-center my-4">{currentPage.categorySelected}</h1>
-        <div className="my-4">
-          <Button id="first-button" onClick={handleShow}>
-            <GiHamburgerMenu /> Vedi le categorie
-          </Button>
-
-          <Offcanvas show={show} onHide={handleClose}>
-            <Offcanvas.Header closeButton>
-              <Offcanvas.Title>Tutte le categorie</Offcanvas.Title>
-            </Offcanvas.Header>
-            <Offcanvas.Body>
-              <ListGroup>
-                <ListGroup.Item
-                  className="mb-3 bg-mainColor text-white"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    setCurrentPage({
-                      categorySelected: "Tutti i Prodotti",
-                      categoryIdSelected: null,
-                      n: 1,
-                    });
-                  }}
-                >
-                  Tutti i Prodotti
-                </ListGroup.Item>
-                {categories.map((category, idx) => {
-                  return (
-                    <ListGroup.Item
-                      key={idx}
-                      className="mb-3 bg-mainColor text-white"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => {
-                        setCurrentPage({
-                          categorySelected: category.name,
-                          categoryIdSelected: category.id,
-                          n: 1,
-                        });
-                      }}
-                    >
-                      {category.name}
-                    </ListGroup.Item>
-                  );
-                })}
-              </ListGroup>
-            </Offcanvas.Body>
-          </Offcanvas>
-        </div>
         {products.length === 0 && (
           <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
             <div className="text-center">
               <Spinner animation="grow" variant="mainColor" />
             </div>
           </div>
+        )}
+        {products.length > 0 && (
+          <>
+            <h1 className="text-center my-4">{currentPage.categorySelected}</h1>
+            <Row className="d-flex justify-content-center">
+              <Col xs={10} className="offset-1">
+                <Form.Group className="mb-1" controlId="formSearch">
+                  <Form.Control
+                    type="text"
+                    placeholder="Cerca i prodotti..."
+                    value={query}
+                    onChange={e => {
+                      setQuery(e.target.value);
+                    }}
+                  />
+                </Form.Group>
+                <Button
+                  className="w-100"
+                  id="first-button"
+                  type="button"
+                  onClick={() => {
+                    if (query.length > 0) {
+                      setCurrentPage({
+                        categorySelected: "Risultati Ricerca",
+                        categoryIdSelected: null,
+                        n: 1,
+                      });
+                    } else {
+                      setCurrentPage({
+                        categorySelected: "Tutti i Prodotti",
+                        categoryIdSelected: null,
+                        n: 1,
+                      });
+                    }
+                  }}
+                >
+                  Cerca
+                </Button>
+              </Col>
+            </Row>
+            <div className="my-4">
+              <Button id="first-button" onClick={handleShow}>
+                <GiHamburgerMenu /> Vedi le categorie
+              </Button>
+
+              <Offcanvas show={show} onHide={handleClose}>
+                <Offcanvas.Header closeButton>
+                  <Offcanvas.Title>Tutte le categorie</Offcanvas.Title>
+                </Offcanvas.Header>
+                <Offcanvas.Body>
+                  <ListGroup>
+                    <ListGroup.Item
+                      className="mb-3 bg-mainColor text-white"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        setCurrentPage({
+                          categorySelected: "Tutti i Prodotti",
+                          categoryIdSelected: null,
+                          n: 1,
+                        });
+                      }}
+                    >
+                      Tutti i Prodotti
+                    </ListGroup.Item>
+                    {categories.map((category, idx) => {
+                      return (
+                        <ListGroup.Item
+                          key={idx}
+                          className="mb-3 bg-mainColor text-white"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            setCurrentPage({
+                              categorySelected: category.name,
+                              categoryIdSelected: category.id,
+                              n: 1,
+                            });
+                          }}
+                        >
+                          {category.name}
+                        </ListGroup.Item>
+                      );
+                    })}
+                  </ListGroup>
+                </Offcanvas.Body>
+              </Offcanvas>
+            </div>
+          </>
         )}
         <Row>
           {products.map(product => {
@@ -196,7 +249,7 @@ const Prova = () => {
                 }}
               />
 
-              {currentPage.n === totalPages.n && totalPages.n > 2 && (
+              {currentPage.n === totalPages && totalPages > 2 && (
                 <Pagination.Item
                   onClick={() => {
                     setCurrentPage(prevState => ({
@@ -221,7 +274,7 @@ const Prova = () => {
                 </Pagination.Item>
               )}
               <Pagination.Item active>{currentPage.n}</Pagination.Item>
-              {currentPage.n !== totalPages.n && (
+              {currentPage.n !== totalPages && (
                 <Pagination.Item
                   onClick={() => {
                     setCurrentPage(prevState => ({
@@ -234,7 +287,7 @@ const Prova = () => {
                 </Pagination.Item>
               )}
 
-              {currentPage.n === 1 && totalPages.n > 2 && (
+              {currentPage.n === 1 && totalPages > 2 && (
                 <Pagination.Item
                   onClick={() => {
                     setCurrentPage(prevState => ({
@@ -249,7 +302,7 @@ const Prova = () => {
 
               <Pagination.Next
                 onClick={() => {
-                  if (currentPage.n !== totalPages.n) {
+                  if (currentPage.n !== totalPages) {
                     setCurrentPage(prevState => ({
                       ...prevState,
                       n: currentPage.n + 1,
@@ -261,7 +314,7 @@ const Prova = () => {
                 onClick={() => {
                   setCurrentPage(prevState => ({
                     ...prevState,
-                    n: totalPages.n,
+                    n: totalPages,
                   }));
                 }}
               />
@@ -273,4 +326,4 @@ const Prova = () => {
   );
 };
 
-export default Prova;
+export default ProductsPage;

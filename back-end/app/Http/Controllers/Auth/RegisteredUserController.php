@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Events\UserRegistered;
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
@@ -35,11 +36,17 @@ class RegisteredUserController extends Controller
             'role' => 'guest'
         ]);
 
+
         event(new UserRegistered($user));
 
         event(new Registered($user));
 
         Auth::login($user);
+
+        $cart = Cart::create([
+            'user_id' => $user->id,
+        ]);
+
 
         return response()->noContent();
     }
