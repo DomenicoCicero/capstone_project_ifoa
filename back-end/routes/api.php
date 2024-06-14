@@ -18,6 +18,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get("/products/category/{categoryId}", [ProductController::class, 'getProductsByCategory']);
     Route::get("/products/search", [ProductController::class, 'searchProducts']);
     Route::get("/products/{productId}", [ProductController::class, 'getProductDetails']);
+    Route::post("/add-prefer-product/{productId}", [ProductController::class, 'addPreferProduct']);
+    Route::get("/prefer-product", [ProductController::class, 'getPreferProducts']);
 
     // Route::post('/send-email', [ContactController::class, 'sendEmail']);
 

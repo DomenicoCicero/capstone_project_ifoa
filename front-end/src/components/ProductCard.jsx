@@ -4,9 +4,42 @@ import { LuShoppingCart } from "react-icons/lu";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { IoMdHeart } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const ProductCard = props => {
   const navigate = useNavigate();
+  // const preferProducts = useSelector(state => {
+  //   return state.products.preferProducts;
+  // });
+  // const [isPrefer, setIsPrefer] = useState(null);
+
+  // const checkIsPrefer = () => {
+  //   const preferProduct = preferProducts.filter(item => item.id === props.product.id);
+
+  //   if (preferProduct.length === 0) {
+  //     setIsPrefer(false);
+  //   } else {
+  //     setIsPrefer(true);
+  //   }
+  // };
+
+  const addProductPrefer = () => {
+    axios
+      .post(`/api/add-prefer-product/${props.product.id}`)
+      .then(data => {
+        console.log(data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    // checkIsPrefer();
+  }, []);
+
   return (
     <Card className="h-100">
       <Card.Img variant="top" src={props.product.image_url} className="cursor-pointer card-border" />
@@ -29,12 +62,17 @@ const ProductCard = props => {
             : props.product.description}
         </Card.Text>
         <Card.Text className="d-flex mb-4">
-          <span>
-            <IoMdHeartEmpty className="fs-4" />
-          </span>
-          {/* <span>
-            <IoMdHeart className="fs-4" />
-          </span> */}
+          {/* {!isPrefer && (
+            <span>
+              <IoMdHeartEmpty className="fs-4" style={{ cursor: "pointer" }} onClick={addProductPrefer} />
+            </span>
+          )}
+          {isPrefer && (
+            <span>
+              <IoMdHeart className="fs-4" />
+            </span>
+          )} */}
+
           {props.product.discounted === 1 && (
             <span className="ms-auto">
               <span className="fw-semibold text-muted text-decoration-line-through">{props.product.price}&euro;</span>

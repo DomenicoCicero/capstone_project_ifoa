@@ -6,6 +6,8 @@ use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -45,6 +47,35 @@ class ProductController extends Controller
         $product = Product::where('id', $productId)->with('category')->get();
 
         return response()->json($product);
+    }
+
+    public function addPreferProduct($productId)
+    {
+        $user_id = Auth::user()->id;
+        $product_id = $productId;
+
+        DB::table('product_user')->insert([
+            'user_id' => $user_id,
+            'product_id' => $product_id,
+        ]);
+
+        return response()->json([
+            'message' => 'prodotto aggiunto con successo ai preferiti',
+        ], 200);
+    }
+
+    public function getPreferProducts()
+    {
+        $user_id = Auth::user()->id;
+
+        $products = DB::table('product_user')
+            ->where('product_user.user_id', '=', $user_id)
+            ->join('products', 'product_user.product_id', '=', 'products.id')
+            ->get();
+
+        return response()->json([
+            'products' => $products,
+        ], 200);
     }
 
     /**

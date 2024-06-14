@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import MyCarousel from "../components/MyCarousel";
 import { useDispatch, useSelector } from "react-redux";
-import { getProducts } from "../redux/actions";
+import { getPreferProducts, getProducts } from "../redux/actions";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 
@@ -50,6 +50,8 @@ const HomePage = () => {
   };
 
   useEffect(() => {
+    // dispatch(getPreferProducts());
+
     if (categories.length === 0 && products.length === 0) {
       dispatch(getProducts());
     }
