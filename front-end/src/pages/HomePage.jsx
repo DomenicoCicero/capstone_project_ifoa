@@ -50,8 +50,6 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    // dispatch(getPreferProducts());
-
     if (categories.length === 0 && products.length === 0) {
       dispatch(getProducts());
     }

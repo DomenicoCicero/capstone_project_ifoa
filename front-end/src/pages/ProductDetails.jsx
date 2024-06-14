@@ -6,9 +6,10 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { LuStar, LuShoppingCart, LuMinus, LuPlus } from "react-icons/lu";
-import { InputGroup, Form } from "react-bootstrap";
+import { InputGroup, Form, Spinner } from "react-bootstrap";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { IoMdHeart } from "react-icons/io";
+import axios from "axios";
 
 const ProductDetails = () => {
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ const ProductDetails = () => {
   const id = parseInt(params["id"]);
   const [product, setProduct] = useState(null);
   const [quantityProduct, setQuantityProduct] = useState(1);
+  const [isPrefer, setIsPrefer] = useState(null);
 
   const getProduct = () => {
     fetch(`/api/products/${id}`)
@@ -27,8 +29,9 @@ const ProductDetails = () => {
         }
       })
       .then(product => {
-        console.log(product[0]);
-        setProduct(product[0]);
+        console.log(product.data[0]);
+        setProduct(product.data[0]);
+        setIsPrefer(product.is_prefer);
       })
       .catch(err => {
         console.log(err);
@@ -47,6 +50,30 @@ const ProductDetails = () => {
     }
   };
 
+  const addProductPrefer = () => {
+    axios
+      .post(`/api/add-prefer-product/${product.id}`)
+      .then(data => {
+        console.log(data);
+        setIsPrefer(true);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const removeProductPrefer = () => {
+    axios
+      .delete(`/api/remove-prefer-product/${product.id}`)
+      .then(data => {
+        console.log(data);
+        setIsPrefer(false);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     getProduct();
   }, []);
@@ -54,6 +81,13 @@ const ProductDetails = () => {
   return (
     <>
       <Container className="my-5">
+        {!product && (
+          <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+            <div className="text-center">
+              <Spinner animation="grow" variant="mainColor" />
+            </div>
+          </div>
+        )}
         {product && (
           <Row>
             <Col xs={12} sm={6}>
@@ -64,12 +98,20 @@ const ProductDetails = () => {
                 <h1>{product.name}</h1>
                 <p>{product.description}</p>
                 <div className="d-flex justify-content-between">
-                  <span>
-                    <IoMdHeartEmpty className="fs-4" />
-                  </span>
-                  {/* <span>
-            <IoMdHeart className="fs-4" />
-          </span> */}
+                  {isPrefer !== null && (
+                    <>
+                      {isPrefer === false && (
+                        <span>
+                          <IoMdHeartEmpty className="fs-4" style={{ cursor: "pointer" }} onClick={addProductPrefer} />
+                        </span>
+                      )}
+                      {isPrefer && (
+                        <span>
+                          <IoMdHeart className="fs-4" style={{ cursor: "pointer" }} onClick={removeProductPrefer} />
+                        </span>
+                      )}
+                    </>
+                  )}
                   <span className="rating-stars align-baseline">
                     <LuStar />
                     <LuStar />

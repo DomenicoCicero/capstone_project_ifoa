@@ -10,8 +10,11 @@ import Form from "react-bootstrap/Form";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { GiHamburgerMenu } from "react-icons/gi";
 import ListGroup from "react-bootstrap/ListGroup";
+import { useDispatch } from "react-redux";
+import { getProductsIdsPrefer } from "../redux/actions";
 
 const ProductsPage = () => {
+  const dispatch = useDispatch();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
 
@@ -64,8 +67,9 @@ const ProductsPage = () => {
       })
       .then(data => {
         console.log(data);
-        setProducts(data.data);
+        setProducts(data.data.data);
         setTotalPages(data.last_page);
+        dispatch(getProductsIdsPrefer(data.preferProductIdArr));
         setShow(false);
       })
       .catch(err => {

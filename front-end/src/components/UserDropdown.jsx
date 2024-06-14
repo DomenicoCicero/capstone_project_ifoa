@@ -1,5 +1,5 @@
 import Dropdown from "react-bootstrap/Dropdown";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LuLogOut } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -37,7 +37,9 @@ const UserDropdown = () => {
       <Dropdown.Menu className="dropdown-menu-end ">
         <Dropdown.Item href="#/action-1">Dati personali</Dropdown.Item>
         <Dropdown.Item href="#/action-1">I miei ordini</Dropdown.Item>
-        <Dropdown.Item href="#/action-2">Preferiti</Dropdown.Item>
+        <Link to={"/prefer"} className="nav-link">
+          <Dropdown.Item href="#/action-1">Preferiti</Dropdown.Item>
+        </Link>
         <div className="dropdown-divider"></div>
 
         <div className="dropdown-item" style={{ cursor: "pointer" }} onClick={() => handleLogout()}>

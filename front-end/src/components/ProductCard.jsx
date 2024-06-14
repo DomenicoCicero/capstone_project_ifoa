@@ -10,26 +10,40 @@ import { useSelector } from "react-redux";
 
 const ProductCard = props => {
   const navigate = useNavigate();
-  // const preferProducts = useSelector(state => {
-  //   return state.products.preferProducts;
-  // });
-  // const [isPrefer, setIsPrefer] = useState(null);
 
-  // const checkIsPrefer = () => {
-  //   const preferProduct = preferProducts.filter(item => item.id === props.product.id);
+  const preferProductIds = useSelector(state => {
+    return state.products.productsIdPrefer;
+  });
 
-  //   if (preferProduct.length === 0) {
-  //     setIsPrefer(false);
-  //   } else {
-  //     setIsPrefer(true);
-  //   }
-  // };
+  const user = useSelector(state => {
+    return state.user.user;
+  });
+
+  const [isPrefer, setIsPrefer] = useState(null);
+
+  const checkIsPrefer = () => {
+    const isPrefer = preferProductIds.some(item => item === props.product.id);
+    setIsPrefer(isPrefer);
+  };
 
   const addProductPrefer = () => {
     axios
       .post(`/api/add-prefer-product/${props.product.id}`)
       .then(data => {
         console.log(data);
+        setIsPrefer(true);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const removeProductPrefer = () => {
+    axios
+      .delete(`/api/remove-prefer-product/${props.product.id}`)
+      .then(data => {
+        console.log(data);
+        setIsPrefer(false);
       })
       .catch(err => {
         console.log(err);
@@ -37,8 +51,10 @@ const ProductCard = props => {
   };
 
   useEffect(() => {
-    // checkIsPrefer();
-  }, []);
+    if (user) {
+      checkIsPrefer();
+    }
+  }, [user]);
 
   return (
     <Card className="h-100">
@@ -62,16 +78,20 @@ const ProductCard = props => {
             : props.product.description}
         </Card.Text>
         <Card.Text className="d-flex mb-4">
-          {/* {!isPrefer && (
-            <span>
-              <IoMdHeartEmpty className="fs-4" style={{ cursor: "pointer" }} onClick={addProductPrefer} />
-            </span>
+          {isPrefer !== null && (
+            <>
+              {isPrefer === false && (
+                <span>
+                  <IoMdHeartEmpty className="fs-4" style={{ cursor: "pointer" }} onClick={addProductPrefer} />
+                </span>
+              )}
+              {isPrefer && (
+                <span>
+                  <IoMdHeart className="fs-4" style={{ cursor: "pointer" }} onClick={removeProductPrefer} />
+                </span>
+              )}
+            </>
           )}
-          {isPrefer && (
-            <span>
-              <IoMdHeart className="fs-4" />
-            </span>
-          )} */}
 
           {props.product.discounted === 1 && (
             <span className="ms-auto">

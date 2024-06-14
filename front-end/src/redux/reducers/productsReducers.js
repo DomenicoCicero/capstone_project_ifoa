@@ -1,8 +1,8 @@
-import { GET_PREFER_PRODUCTS, GET_PRODUCTS } from "../actions";
+import { GET_PRODUCTS, GET_PRODUCTS_IDS_PREFER_ARRAY } from "../actions";
 
 const initialState = {
   products: [],
-  preferProducts: [],
+  productsIdPrefer: [],
 };
 
 const productsReducers = (state = initialState, action) => {
@@ -10,12 +10,13 @@ const productsReducers = (state = initialState, action) => {
     case GET_PRODUCTS:
       return {
         ...state,
-        products: action.payload,
+        products: action.payload.data,
+        productsIdPrefer: action.payload.preferProductIdArr,
       };
-    case GET_PREFER_PRODUCTS:
+    case GET_PRODUCTS_IDS_PREFER_ARRAY:
       return {
         ...state,
-        preferProducts: action.payload,
+        productsIdPrefer: action.payload,
       };
     default:
       return state;
