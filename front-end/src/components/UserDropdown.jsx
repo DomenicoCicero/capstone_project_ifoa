@@ -37,9 +37,7 @@ const UserDropdown = () => {
       <Dropdown.Menu className="dropdown-menu-end ">
         <Dropdown.Item href="#/action-1">Dati personali</Dropdown.Item>
         <Dropdown.Item href="#/action-1">I miei ordini</Dropdown.Item>
-        <Link to={"/prefer"} className="nav-link">
-          <Dropdown.Item href="#/action-1">Preferiti</Dropdown.Item>
-        </Link>
+        <Dropdown.Item onClick={() => navigate("/prefer")}>Preferiti</Dropdown.Item>
         <div className="dropdown-divider"></div>
 
         <div className="dropdown-item" style={{ cursor: "pointer" }} onClick={() => handleLogout()}>

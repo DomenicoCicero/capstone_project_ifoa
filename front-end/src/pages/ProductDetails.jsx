@@ -10,6 +10,7 @@ import { InputGroup, Form, Spinner } from "react-bootstrap";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { IoMdHeart } from "react-icons/io";
 import axios from "axios";
+import { isDeletedFromPrefer } from "../redux/actions";
 
 const ProductDetails = () => {
   const dispatch = useDispatch();
@@ -68,6 +69,7 @@ const ProductDetails = () => {
       .then(data => {
         console.log(data);
         setIsPrefer(false);
+        dispatch(isDeletedFromPrefer());
       })
       .catch(err => {
         console.log(err);

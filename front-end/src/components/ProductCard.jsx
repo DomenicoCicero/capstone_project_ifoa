@@ -6,10 +6,12 @@ import { IoMdHeart } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { isDeletedFromPrefer } from "../redux/actions";
 
 const ProductCard = props => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const preferProductIds = useSelector(state => {
     return state.products.productsIdPrefer;
@@ -43,7 +45,10 @@ const ProductCard = props => {
       .delete(`/api/remove-prefer-product/${props.product.id}`)
       .then(data => {
         console.log(data);
-        setIsPrefer(false);
+        dispatch(isDeletedFromPrefer());
+        setTimeout(() => {
+          setIsPrefer(false);
+        }, 600);
       })
       .catch(err => {
         console.log(err);
