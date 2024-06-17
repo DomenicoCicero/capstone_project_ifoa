@@ -25,6 +25,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get("/prefer-product", [ProductController::class, 'getPreferProducts']);
     Route::post("/update_profile_img", [UserController::class, 'updateProfileImg']);
     Route::get("/addresses", [AddressController::class, 'getAddress']);
+    Route::post("/addresses/update", [AddressController::class, 'updateAddress']);
 
     // Route::post('/send-email', [ContactController::class, 'sendEmail']);
 

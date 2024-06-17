@@ -23,6 +23,7 @@ const AccountPage = () => {
   });
   const [show, setShow] = useState(false);
   const [errors, setErrors] = useState(null);
+  const [errorsAddress, setErrorsAddress] = useState(null);
   const [showPage, setShowPage] = useState(false);
 
   const [address, setAddress] = useState({
@@ -76,8 +77,21 @@ const AccountPage = () => {
         }
         setShowPage(true);
       })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  const updateAddress = e => {
+    e.preventDefault();
+    axios
+      .post(`/api/addresses/update`, address)
+      .then(response => {
+        console.log(response);
+      })
       .catch(err => {
         console.log(err);
+        setErrorsAddress(err.response.data.errors);
       });
   };
 
@@ -100,19 +114,24 @@ const AccountPage = () => {
           {showPage && (
             <>
               <Row>
-                <Col xs={4}>
+                <Col xs={12} md={4} className="mb-4">
                   <div>
-                    {!user.profile_img && (
-                      <img
-                        src={`https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgsaRe2zqH_BBicvUorUseeTaE4kxPL2FmOQ&s`}
-                        alt=""
-                        width={"200px"}
-                        className="rounded-circle"
-                      />
-                    )}
-                    {user.profile_img && (
-                      <img src={`/storage/${user.profile_img}`} alt="" width={"200px"} className="rounded-circle" />
-                    )}
+                    <div className="d-flex justify-content-center mt-3">
+                      {!user.profile_img && (
+                        <div className="profile-container-page">
+                          <img
+                            src={`https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgsaRe2zqH_BBicvUorUseeTaE4kxPL2FmOQ&s`}
+                            alt=""
+                            className="profile-container-page"
+                          />
+                        </div>
+                      )}
+                      {user.profile_img && (
+                        <div className="profile-container-page">
+                          <img src={`/storage/${user.profile_img}`} alt="" className="profile-image-page" />
+                        </div>
+                      )}
+                    </div>
                     <div className="d-flex justify-content-center mt-3">
                       <Button
                         type="button"
@@ -155,13 +174,14 @@ const AccountPage = () => {
                     </div>
                   </div>
                 </Col>
-                <Col xs={8} className="text-center">
+                <Col xs={12} md={8} className="text-center">
                   <h3>Indirizzo</h3>
-                  <Form>
+                  <Form onSubmit={updateAddress}>
                     <Form.Group className="mb-3" controlId="formBasicStreet">
                       <Form.Label>Via/Piazza</Form.Label>
                       <Form.Control
                         type="text"
+                        required
                         onChange={e => {
                           setAddress({
                             ...address,
@@ -170,12 +190,14 @@ const AccountPage = () => {
                         }}
                         value={address.street}
                       />
+                      {errorsAddress && <div className="error text-danger">{errorsAddress.street}</div>}
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formBasicCivicNumber">
                       <Form.Label>Numero Civico</Form.Label>
                       <Form.Control
                         type="text"
+                        required
                         onChange={e => {
                           setAddress({
                             ...address,
@@ -184,12 +206,14 @@ const AccountPage = () => {
                         }}
                         value={address.civic_number}
                       />
+                      {errorsAddress && <div className="error text-danger">{errorsAddress.civic_number}</div>}
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formBasicPhone">
                       <Form.Label>Numero Telefonico</Form.Label>
                       <Form.Control
                         type="text"
+                        required
                         onChange={e => {
                           setAddress({
                             ...address,
@@ -198,26 +222,30 @@ const AccountPage = () => {
                         }}
                         value={address.phone}
                       />
+                      {errorsAddress && <div className="error text-danger">{errorsAddress.phone}</div>}
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formBasicCity">
                       <Form.Label>Città</Form.Label>
                       <Form.Control
                         type="text"
+                        required
                         onChange={e => {
                           setAddress({
                             ...address,
-                            street: e.target.city,
+                            city: e.target.value,
                           });
                         }}
                         value={address.city}
                       />
+                      {errorsAddress && <div className="error text-danger">{errorsAddress.city}</div>}
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formBasicPostalCode">
                       <Form.Label>Codice Postale</Form.Label>
                       <Form.Control
                         type="text"
+                        required
                         onChange={e => {
                           setAddress({
                             ...address,
@@ -226,6 +254,7 @@ const AccountPage = () => {
                         }}
                         value={address.postal_code}
                       />
+                      {errorsAddress && <div className="error text-danger">{errorsAddress.postal_code}</div>}
                     </Form.Group>
 
                     <Button id="first-button" type="submit">

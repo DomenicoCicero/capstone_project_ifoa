@@ -23,15 +23,18 @@ const UserDropdown = () => {
     <Dropdown>
       <Dropdown.Toggle id="dropdown-custom-1" data-toggle="dropdown">
         {user.profile_img && (
-          <img src={`/storage/${user.profile_img}`} alt="" width={"50px"} className="rounded-circle" />
+          <div className="profile-container-nav">
+            <img src={`/storage/${user.profile_img}`} alt="" className="profile-image-nav" />
+          </div>
         )}
         {!user.profile_img && (
-          <img
-            src={`https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgsaRe2zqH_BBicvUorUseeTaE4kxPL2FmOQ&s`}
-            alt=""
-            width={"50px"}
-            className="rounded-circle"
-          />
+          <div className="profile-container-nav">
+            <img
+              src={`https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgsaRe2zqH_BBicvUorUseeTaE4kxPL2FmOQ&s`}
+              alt=""
+              className="profile-image-nav"
+            />
+          </div>
         )}
       </Dropdown.Toggle>
       <Dropdown.Menu className="dropdown-menu-end ">

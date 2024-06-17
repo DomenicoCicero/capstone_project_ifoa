@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Address;
 use App\Http\Requests\StoreAddressRequest;
 use App\Http\Requests\UpdateAddressRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AddressController extends Controller
@@ -23,6 +24,43 @@ class AddressController extends Controller
         } else {
             return response()->json(['address' => 'nessun idirizzo salvato']);
         }
+    }
+
+    public function updateAddress(Request $request)
+    {
+        $user_id = Auth::user()->id;
+
+        $validatedData = $request->validate([
+            'phone' => 'required|string|max:20',
+            'street' => 'required|string|max:255',
+            'civic_number' => 'required|string|max:15',
+            'city' => 'required|string|max:50',
+            'postal_code' => 'required|string|max:10',
+        ]);
+
+        $address = Address::where('user_id', $user_id)->first();
+
+        if($address) {
+            $address->phone = $validatedData['phone'];
+            $address->street = $validatedData['street'];
+            $address->civic_number = $validatedData['civic_number'];
+            $address->city = $validatedData['city'];
+            $address->postal_code = $validatedData['postal_code'];
+
+            $address->save();
+        } else {
+            $new_address = new Address();
+            $new_address->user_id = $user_id;
+            $new_address->phone = $validatedData['phone'];
+            $new_address->street = $validatedData['street'];
+            $new_address->civic_number = $validatedData['civic_number'];
+            $new_address->city = $validatedData['city'];
+            $new_address->postal_code = $validatedData['postal_code'];
+
+            $new_address->save();
+        }
+
+        return response()->json(['message' => 'Address updated successfully']);
     }
 
     /**
