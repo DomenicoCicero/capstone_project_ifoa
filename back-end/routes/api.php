@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +23,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post("/add-prefer-product/{productId}", [ProductController::class, 'addPreferProduct']);
     Route::delete("/remove-prefer-product/{productId}", [ProductController::class, 'removeProduct']);
     Route::get("/prefer-product", [ProductController::class, 'getPreferProducts']);
+    Route::post("/update_profile_img", [UserController::class, 'updateProfileImg']);
+    Route::get("/addresses", [AddressController::class, 'getAddress']);
 
     // Route::post('/send-email', [ContactController::class, 'sendEmail']);
 

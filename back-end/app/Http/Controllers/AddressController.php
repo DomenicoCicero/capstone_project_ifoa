@@ -5,15 +5,24 @@ namespace App\Http\Controllers;
 use App\Models\Address;
 use App\Http\Requests\StoreAddressRequest;
 use App\Http\Requests\UpdateAddressRequest;
+use Illuminate\Support\Facades\Auth;
 
 class AddressController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function getAddress()
     {
-        //
+        $user_id = Auth::user()->id;
+
+        $address = Address::where('user_id', $user_id)->first();
+
+        if($address) {
+            return response()->json(['address' => $address], 200);
+        } else {
+            return response()->json(['address' => 'nessun idirizzo salvato']);
+        }
     }
 
     /**
