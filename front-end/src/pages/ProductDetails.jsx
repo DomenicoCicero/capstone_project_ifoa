@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { LuStar, LuShoppingCart, LuMinus, LuPlus } from "react-icons/lu";
-import { InputGroup, Form, Spinner } from "react-bootstrap";
+import { InputGroup, Form, Spinner, Alert } from "react-bootstrap";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { IoMdHeart } from "react-icons/io";
 import axios from "axios";
@@ -19,6 +19,8 @@ const ProductDetails = () => {
   const [product, setProduct] = useState(null);
   const [quantityProduct, setQuantityProduct] = useState(1);
   const [isPrefer, setIsPrefer] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [messageAlert, setmessageAlert] = useState("");
 
   const getProduct = () => {
     fetch(`/api/products/${id}`)
@@ -76,6 +78,22 @@ const ProductDetails = () => {
       });
   };
 
+  const addToCart = () => {
+    axios
+      .post(`/api/cart-item/update`, { product_id: id, quantity: quantityProduct })
+      .then(data => {
+        console.log(data);
+        setmessageAlert(data.data.message);
+        setShowAlert(true);
+        setTimeout(() => {
+          setShowAlert(false);
+        }, 1000);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     getProduct();
   }, []);
@@ -88,6 +106,13 @@ const ProductDetails = () => {
             <div className="text-center">
               <Spinner animation="grow" variant="mainColor" />
             </div>
+          </div>
+        )}
+        {showAlert && (
+          <div className="text-center mt-3">
+            <Alert variant="success" className="custom-alert">
+              <Alert.Heading>{messageAlert}</Alert.Heading>
+            </Alert>
           </div>
         )}
         {product && (
@@ -151,7 +176,7 @@ const ProductDetails = () => {
                     </Button>
                   </InputGroup>
 
-                  <Button type="button" id="first-button">
+                  <Button type="button" id="first-button" onClick={addToCart}>
                     Aggiungi al Carrello <LuShoppingCart className="fs-5 ms-1" />
                   </Button>
                 </div>

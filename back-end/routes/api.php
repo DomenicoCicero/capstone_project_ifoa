@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProductController;
@@ -26,6 +27,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post("/update_profile_img", [UserController::class, 'updateProfileImg']);
     Route::get("/addresses", [AddressController::class, 'getAddress']);
     Route::post("/addresses/update", [AddressController::class, 'updateAddress']);
+    Route::post("/cart-item/update", [CartItemController::class, 'updateCartItem']);
 
     // Route::post('/send-email', [ContactController::class, 'sendEmail']);
 

@@ -9,7 +9,7 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
 import { login } from "../redux/actions";
-import { Spinner } from "react-bootstrap";
+import { Alert, Spinner } from "react-bootstrap";
 
 const AccountPage = () => {
   const dispatch = useDispatch();
@@ -25,6 +25,7 @@ const AccountPage = () => {
   const [errors, setErrors] = useState(null);
   const [errorsAddress, setErrorsAddress] = useState(null);
   const [showPage, setShowPage] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const [address, setAddress] = useState({
     phone: "",
@@ -88,6 +89,10 @@ const AccountPage = () => {
       .post(`/api/addresses/update`, address)
       .then(response => {
         console.log(response);
+        setSuccess(true);
+        setTimeout(() => {
+          setSuccess(false);
+        }, 1000);
       })
       .catch(err => {
         console.log(err);
@@ -113,6 +118,13 @@ const AccountPage = () => {
           )}
           {showPage && (
             <>
+              {success && (
+                <div className="text-center mt-3">
+                  <Alert variant="success" className="custom-alert">
+                    <Alert.Heading>Indirizzo salvato con successo!</Alert.Heading>
+                  </Alert>
+                </div>
+              )}
               <Row>
                 <Col xs={12} md={4} className="mb-4">
                   <div>
