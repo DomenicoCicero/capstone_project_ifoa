@@ -28,6 +28,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get("/addresses", [AddressController::class, 'getAddress']);
     Route::post("/addresses/update", [AddressController::class, 'updateAddress']);
     Route::post("/cart-item/update", [CartItemController::class, 'updateCartItem']);
+    Route::get("/cart", [CartItemController::class, 'getCart']);
 
     // Route::post('/send-email', [ContactController::class, 'sendEmail']);
 

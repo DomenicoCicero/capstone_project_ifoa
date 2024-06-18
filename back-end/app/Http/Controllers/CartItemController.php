@@ -53,6 +53,37 @@ class CartItemController extends Controller
         return response()->json(['message' => 'Prodotto aggiunto al carrello']);
      }
 
+     public function getCart()
+     {
+        $user_id = Auth::user()->id;
+
+        $cart = Cart::where('user_id', $user_id)->first();
+        $cart_id = $cart->id;
+
+        $cart_items = CartItem::with('product', 'product.category')->where('cart_id', $cart_id)->get()->all();
+
+        if(count($cart_items) === 0) {
+            return response()->json(['message' => 'Nessun prodotto nel carrello']);
+        } else {
+            $total_price = 0;
+            $discounted = 0;
+
+            for ($i=0; $i < count($cart_items); $i++) { 
+                $total_price += $cart_items[$i]->product->price * $cart_items[$i]->quantity;
+                if($cart_items[$i]->product->discounted === 1) {
+                    $discounted += ($cart_items[$i]->product->price - $cart_items[$i]->product->price_discounted) * $cart_items[$i]->quantity;
+                }
+            }
+
+            return response()->json([
+                'data' => $cart_items,
+                'total_price' => round($total_price, 2),
+                'discounted' => round($discounted, 2),
+                'total_discounted' => round($total_price - $discounted, 2)
+            ]);
+        }
+     }
+
     public function index()
     {
         //
