@@ -10,7 +10,7 @@ import { InputGroup, Form, Spinner, Alert } from "react-bootstrap";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { IoMdHeart } from "react-icons/io";
 import axios from "axios";
-import { isDeletedFromPrefer } from "../redux/actions";
+import { addQuantityCart, isDeletedFromPrefer } from "../redux/actions";
 
 const ProductDetails = () => {
   const dispatch = useDispatch();
@@ -83,6 +83,9 @@ const ProductDetails = () => {
       .post(`/api/cart-item/update`, { product_id: id, quantity: quantityProduct })
       .then(data => {
         console.log(data);
+        if (data.data.message === "Prodotto aggiunto al carrello") {
+          dispatch(addQuantityCart(quantityProduct));
+        }
         setmessageAlert(data.data.message);
         setShowAlert(true);
         setTimeout(() => {

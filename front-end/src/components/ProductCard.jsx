@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { isDeletedFromPrefer } from "../redux/actions";
+import { addQuantityCart, isDeletedFromPrefer } from "../redux/actions";
 import { Alert } from "react-bootstrap";
 
 const ProductCard = props => {
@@ -64,6 +64,9 @@ const ProductCard = props => {
       .post(`/api/cart-item/update`, { product_id: props.product.id, quantity: 1 })
       .then(data => {
         console.log(data);
+        if (data.data.message === "Prodotto aggiunto al carrello") {
+          dispatch(addQuantityCart(1));
+        }
         setmessageAlert(data.data.message);
         setShowAlert(true);
         setTimeout(() => {

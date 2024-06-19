@@ -45,7 +45,7 @@ class CartItemController extends Controller
             $cartItem->product_id = $product_id;
 
             if($cartItem->quantity > $stock_quantity) {
-                return response()->json(['message' => 'Quantità non disponibile in negozio'], 200);
+                return response()->json(['message' => 'Quantita non disponibile in negozio'], 200);
             } else {
                 $cartItem->save();
             }
@@ -82,6 +82,20 @@ class CartItemController extends Controller
                 'total_discounted' => round($total_price - $discounted, 2)
             ]);
         }
+     }
+
+     public function deleteCartItem($productId)
+     {
+        $user_id = Auth::user()->id;
+
+        $cart = Cart::where('user_id', $user_id)->first();
+        $cart_id = $cart->id;
+
+        $cart_item = CartItem::where('cart_id', $cart_id)->where('product_id', $productId)->delete();
+
+        return response()->json([
+            'message' => 'prodotto eliminato con successo dal carrello',
+        ], 200);
      }
 
     public function index()

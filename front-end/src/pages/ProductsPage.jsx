@@ -68,7 +68,7 @@ const ProductsPage = () => {
       .then(data => {
         console.log(data);
         setProducts(data.data.data);
-        setTotalPages(data.last_page);
+        setTotalPages(data.data.last_page);
         dispatch(getProductsIdsPrefer(data.preferProductIdArr));
         setShow(false);
       })

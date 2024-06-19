@@ -5,12 +5,35 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Http\Requests\StoreCartRequest;
 use App\Http\Requests\UpdateCartRequest;
+use App\Models\CartItem;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+     public function getCartQuantity()
+     {
+        $user_id = Auth::user()->id;
+
+        $cart = Cart::where('user_id', $user_id)->first();
+        $cart_id = $cart->id;
+
+        $cart_items = CartItem::where('cart_id', $cart_id)->get()->all();
+
+        $quantity = 0;
+
+        for ($i=0; $i < count($cart_items); $i++) { 
+            $quantity += $cart_items[$i]->quantity;
+        }
+
+        return response()->json([
+            'quantity' => $quantity,
+        ]);
+     }
+
     public function index()
     {
         //
