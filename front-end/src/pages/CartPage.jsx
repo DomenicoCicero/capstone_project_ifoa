@@ -6,10 +6,14 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import CartItem from "../components/CartItem";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Alert, Spinner } from "react-bootstrap";
+import { isDeletedFromCart } from "../redux/actions";
+import { useNavigate } from "react-router-dom";
 
 const CartPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [cartItems, setCartItems] = useState(null);
   const [totalPrice, setTotalPrice] = useState(null);
   const [discounted, setDiscounted] = useState(null);
@@ -30,6 +34,24 @@ const CartPage = () => {
         setTotalPrice(data.data.total_price);
         setDiscounted(data.data.discounted);
         setTotalDiscounted(data.data.total_discounted);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const checkout = () => {
+    axios
+      .post(`/api/checkout`, {
+        cart_items: cartItems,
+        total_price: totalPrice,
+        discounted: discounted,
+        total_price_discounted: totalDiscounted,
+      })
+      .then(data => {
+        console.log(data);
+        dispatch(isDeletedFromCart());
+        navigate(`/${data.data.next_step}`);
       })
       .catch(err => {
         console.log(err);
@@ -99,7 +121,7 @@ const CartPage = () => {
                   </Table>
 
                   <div className="text-center mt-5">
-                    <Button type="button" id="first-button" className="mb-3 w-100">
+                    <Button type="button" id="first-button" className="mb-3 w-100" onClick={checkout}>
                       Checkout
                     </Button>
                   </div>

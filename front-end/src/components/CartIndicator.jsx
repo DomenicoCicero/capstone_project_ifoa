@@ -2,7 +2,7 @@ import { LuShoppingCart } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getQuantityCart } from "../redux/actions";
+import { getQuantityCart, isDeletedFromCart } from "../redux/actions";
 
 const CartIndicator = () => {
   const dispatch = useDispatch();
@@ -11,9 +11,13 @@ const CartIndicator = () => {
     return state.cart.cartQuantity;
   });
 
+  const isDeleteFromCart = useSelector(state => {
+    return state.cart.isDeleteFromCart;
+  });
+
   useEffect(() => {
     dispatch(getQuantityCart());
-  }, [cartQuantity]);
+  }, [cartQuantity, isDeleteFromCart]);
 
   return (
     <div className="position-relative ">
