@@ -7,14 +7,18 @@ import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import CartItem from "../components/CartItem";
 import { useSelector } from "react-redux";
+import { Alert, Spinner } from "react-bootstrap";
 
 const CartPage = () => {
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState(null);
   const [totalPrice, setTotalPrice] = useState(null);
   const [discounted, setDiscounted] = useState(null);
   const [totalDiscounted, setTotalDiscounted] = useState(null);
   const isDeleteFromcart = useSelector(state => {
     return state.cart.isDeleteFromCart;
+  });
+  const updateQuantityCartItem = useSelector(state => {
+    return state.cart.updateQuantityCartItem;
   });
 
   const getCart = () => {
@@ -34,59 +38,77 @@ const CartPage = () => {
 
   useEffect(() => {
     getCart();
-  }, [isDeleteFromcart]);
+  }, [isDeleteFromcart, updateQuantityCartItem]);
 
   return (
     <>
-      <Container className="my-5">
-        <h1 className="text-center my-3">Carrello</h1>
-        <Row>
-          <Col md={12} lg={8}>
-            {cartItems.map(cartItem => {
-              return (
-                <div key={cartItem.product.id} className="mb-3">
-                  <CartItem product={cartItem.product} quantity={cartItem.quantity} />
-                </div>
-              );
-            })}
-          </Col>
-
-          <Col lg={3} className="offset-lg-1">
-            <div className="tables mb-4">
-              <Table responsive className="table-borderless">
-                <thead>
-                  <tr className="total-table-head text-center ">
-                    <th colSpan="2">Riepilogo dell'ordine</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="total-data">
-                    <td className="fw-semibold">Subtotale</td>
-                    <td>{totalPrice}&euro;</td>
-                  </tr>
-                  <tr className="total-data border-bottom">
-                    <td className="fw-semibold">Sconto</td>
-                    <td> {discounted}&euro;</td>
-                  </tr>
-                </tbody>
-
-                <tfoot className="total-price border-bottom">
-                  <tr className="total-data ">
-                    <td>Totale</td>
-                    <td>{totalDiscounted}&euro;</td>
-                  </tr>
-                </tfoot>
-              </Table>
-
-              <div className="text-center mt-5">
-                <Button type="button" id="first-button" className="mb-3 w-100">
-                  Checkout
-                </Button>
-              </div>
+      {!cartItems && (
+        <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+          <div className="text-center">
+            <Spinner animation="grow" variant="mainColor" />
+          </div>
+        </div>
+      )}
+      {cartItems && (
+        <Container className="my-5">
+          <h1 className="text-center my-3">Carrello</h1>
+          {cartItems && cartItems.length === 0 && (
+            <div className="text-center mt-3">
+              <Alert variant="success" className="custom-alert">
+                <Alert.Heading>Nessun prodotto nel carrello</Alert.Heading>
+              </Alert>
             </div>
-          </Col>
-        </Row>
-      </Container>
+          )}
+          {cartItems && cartItems.length > 0 && (
+            <Row>
+              <Col md={12} lg={8}>
+                {cartItems.map(cartItem => {
+                  return (
+                    <div key={cartItem.product.id} className="mb-3">
+                      <CartItem product={cartItem.product} quantity={cartItem.quantity} />
+                    </div>
+                  );
+                })}
+              </Col>
+
+              <Col lg={3} className="offset-lg-1">
+                <div className="tables mb-4">
+                  <Table responsive className="table-borderless">
+                    <thead>
+                      <tr className="total-table-head text-center ">
+                        <th colSpan="2">Riepilogo dell'ordine</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="total-data">
+                        <td className="fw-semibold">Subtotale</td>
+                        <td>{totalPrice}&euro;</td>
+                      </tr>
+                      <tr className="total-data border-bottom">
+                        <td className="fw-semibold">Sconto</td>
+                        <td> {discounted}&euro;</td>
+                      </tr>
+                    </tbody>
+
+                    <tfoot className="total-price border-bottom">
+                      <tr className="total-data ">
+                        <td>Totale</td>
+                        <td>{totalDiscounted}&euro;</td>
+                      </tr>
+                    </tfoot>
+                  </Table>
+
+                  <div className="text-center mt-5">
+                    <Button type="button" id="first-button" className="mb-3 w-100">
+                      Checkout
+                    </Button>
+                  </div>
+                </div>
+              </Col>
+            </Row>
+          )}
+        </Container>
+      )}
     </>
   );
 };

@@ -63,7 +63,7 @@ class CartItemController extends Controller
         $cart_items = CartItem::with('product', 'product.category')->where('cart_id', $cart_id)->get()->all();
 
         if(count($cart_items) === 0) {
-            return response()->json(['message' => 'Nessun prodotto nel carrello']);
+            return response()->json(['data' => []]);
         } else {
             $total_price = 0;
             $discounted = 0;
@@ -96,6 +96,30 @@ class CartItemController extends Controller
         return response()->json([
             'message' => 'prodotto eliminato con successo dal carrello',
         ], 200);
+     }
+
+     public function updateCartItemCartPage(Request $request)
+     {
+        $user_id = Auth::user()->id;
+
+        $cart = Cart::where('user_id', $user_id)->first();
+        $cart_id = $cart->id;
+
+        $quantity = $request->quantity;
+        $product_id = $request->product_id;
+
+        $cart_item = CartItem::where('cart_id', $cart_id)->where('product_id', $product_id)->first();
+        $product = Product::where('id', $product_id)->first();
+        $stock_quantity = $product->stock_quantity;
+
+        if($quantity > $stock_quantity) {
+            return response()->json(['message' => 'Quantità non disponibile in negozio']);
+        } else {
+            $cart_item->quantity = $quantity;
+            $cart_item->save();
+
+            return response()->json(['message' => 'Quantità modificata con successo']);
+        }
      }
 
     public function index()

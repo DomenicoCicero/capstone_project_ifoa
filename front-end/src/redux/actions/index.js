@@ -7,6 +7,7 @@ export const IS_DELETED_FROM_PREFER = "IS_DELETED_FROM_PREFER";
 export const IS_DELETED_FROM_CART = "IS_DELETED_FROM_CART";
 export const GET_QUANTITY_CART = "GET_QUANTITY_CART";
 export const ADD_QUANTITY_CART = "ADD_QUANTITY_CART";
+export const UPDATE_QUANTITY_CART_ITEM = "UPDATE_QUANTITY_CART_ITEM";
 
 export const login = data => {
   return {
@@ -31,6 +32,12 @@ export const isDeletedFromPrefer = data => {
 export const isDeletedFromCart = data => {
   return {
     type: IS_DELETED_FROM_CART,
+  };
+};
+
+export const updateQuantityCartItem = data => {
+  return {
+    type: UPDATE_QUANTITY_CART_ITEM,
   };
 };
 
