@@ -7,6 +7,7 @@ use App\Http\Requests\StoreCartItemRequest;
 use App\Http\Requests\UpdateCartItemRequest;
 use App\Models\Cart;
 use App\Models\Product;
+use App\Models\ShopOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -75,11 +76,20 @@ class CartItemController extends Controller
                 }
             }
 
+            $exist_shop_order = null;
+            $shop_order_exist = ShopOrder::where('user_id', $user_id)->where('step', '<>', 'completed')->first();
+            if($shop_order_exist) {
+                $exist_shop_order = true;
+            } else {
+                $exist_shop_order = false;
+            }
+
             return response()->json([
                 'data' => $cart_items,
                 'total_price' => round($total_price, 2),
                 'discounted' => round($discounted, 2),
-                'total_discounted' => round($total_price - $discounted, 2)
+                'total_discounted' => round($total_price - $discounted, 2),
+                'exist_shop_order' => $exist_shop_order
             ]);
         }
      }

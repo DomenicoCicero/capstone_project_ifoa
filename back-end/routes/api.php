@@ -5,6 +5,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShopOrderController;
 use App\Http\Controllers\UserController;
@@ -37,6 +38,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post("/checkout", [ShopOrderController::class, 'checkout']);
     Route::post("/delivery_method", [ShopOrderController::class, 'deliveryMethod']);
     Route::post("/change_step_shop_order", [ShopOrderController::class, 'changeStepShopOrder']);
+    Route::post("/payment_method", [ShopOrderController::class, 'paymentMethod']);
+    Route::post('/charge', [PaymentController::class, 'charge']);
+    Route::get('/regain_shop_order', [ShopOrderController::class, 'regainShopOrder']);
 
 
     // Route::post('/send-email', [ContactController::class, 'sendEmail']);

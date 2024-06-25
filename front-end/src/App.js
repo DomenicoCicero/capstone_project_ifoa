@@ -24,6 +24,8 @@ import CartPage from "./pages/CartPage";
 import DeliveryMethodPage from "./pages/DeliveryMethodPage";
 import AddressPaymentPage from "./pages/AddressPaymentPage";
 import PaymentMethodPage from "./pages/PaymentMethodPage";
+import OrderCompletedPage from "./pages/OrderCompletedPage";
+import PaymentPage from "./pages/PaymentPage";
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -55,6 +57,8 @@ function App() {
             <Route path="/delivery_method_page" element={<DeliveryMethodPage />} />
             <Route path="/address_payment_page" element={<AddressPaymentPage />} />
             <Route path="/payment_method_page" element={<PaymentMethodPage />} />
+            <Route path="/payment_page" element={<PaymentPage />} />
+            <Route path="/completed" element={<OrderCompletedPage />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/contacts" element={<Contacts />} />
             <Route path="/login" element={<Login />} />

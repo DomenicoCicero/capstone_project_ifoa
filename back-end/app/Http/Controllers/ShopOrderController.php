@@ -77,6 +77,33 @@ class ShopOrderController extends Controller
         }
     }
 
+    public function paymentMethod(Request $request)
+    {
+        $user_id = Auth::user()->id;
+        $shop_order = ShopOrder::where('user_id', $user_id)->where('step', '<>', 'completed')->first();
+
+        $shop_order->payment_method = $request->payment_method;
+        $shop_order->save();
+
+        if($request->payment_method === "card") {
+            $shop_order->step = "payment_page";
+            $shop_order->save();
+            return response()->json([
+                'message' => 'metodo di pagamento aggiunto',
+                'next_step' => 'payment_page',
+            ]);
+        }
+
+        if($request->payment_method === "cash") {
+            $shop_order->step = "completed";
+            $shop_order->save();
+            return response()->json([
+                'message' => 'metodo di pagamento aggiunto',
+                'next_step' => 'completed',
+            ]);
+        }
+    }
+
     public function changeStepShopOrder(Request $request)
     {
         $user_id = Auth::user()->id;
@@ -86,6 +113,19 @@ class ShopOrderController extends Controller
 
         return response()->json([
             'message' => 'step successivo aggiornato',
+        ]);
+    }
+
+    public function regainShopOrder() 
+    {
+        $user_id = Auth::user()->id;
+        $shop_order = ShopOrder::where('user_id', $user_id)->where('step', '<>', 'completed')->first();
+
+        $shop_order_step = $shop_order->step;
+
+        return response()->json([
+            'message' => 'Ordine ripreso',
+            'next_step' => $shop_order_step,
         ]);
     }
 

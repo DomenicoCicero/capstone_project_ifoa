@@ -18,6 +18,7 @@ const CartPage = () => {
   const [totalPrice, setTotalPrice] = useState(null);
   const [discounted, setDiscounted] = useState(null);
   const [totalDiscounted, setTotalDiscounted] = useState(null);
+  const [existShopOrder, setExistShopOrder] = useState(null);
   const isDeleteFromcart = useSelector(state => {
     return state.cart.isDeleteFromCart;
   });
@@ -34,6 +35,7 @@ const CartPage = () => {
         setTotalPrice(data.data.total_price);
         setDiscounted(data.data.discounted);
         setTotalDiscounted(data.data.total_discounted);
+        setExistShopOrder(data.data.exist_shop_order);
       })
       .catch(err => {
         console.log(err);
@@ -51,6 +53,18 @@ const CartPage = () => {
       .then(data => {
         console.log(data);
         dispatch(isDeletedFromCart());
+        navigate(`/${data.data.next_step}`);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const regainShopOrder = () => {
+    axios
+      .get(`/api/regain_shop_order`)
+      .then(data => {
+        console.log(data);
         navigate(`/${data.data.next_step}`);
       })
       .catch(err => {
@@ -120,11 +134,18 @@ const CartPage = () => {
                     </tfoot>
                   </Table>
 
-                  <div className="text-center mt-5">
+                  <div className="text-center mt-2">
                     <Button type="button" id="first-button" className="mb-3 w-100" onClick={checkout}>
                       Checkout
                     </Button>
                   </div>
+                  {existShopOrder && (
+                    <div className="text-center mt-2">
+                      <Button type="button" id="first-button" className="mb-3 w-100" onClick={regainShopOrder}>
+                        Riprendi Ordine
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </Col>
             </Row>

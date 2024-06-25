@@ -12,6 +12,7 @@ const AddressPaymentPage = () => {
     city: "",
     postal_code: "",
   });
+  const [addressEmpty, setAddressEmpty] = useState(false);
 
   const [errorsAddress, setErrorsAddress] = useState(null);
   const [showPage, setShowPage] = useState(false);
@@ -60,19 +61,10 @@ const AddressPaymentPage = () => {
       .post(`/api/change_step_shop_order`, { step: "payment_method_page" })
       .then(data => {
         console.log(data);
-        if (
-          address.phone !== "" &&
-          address.street !== "" &&
-          address.civic_number !== "" &&
-          address.city !== "" &&
-          address.postal_code !== ""
-        ) {
-          navigate("/payment_method_page");
-        }
+        navigate("/payment_method_page");
       })
       .catch(err => {
         console.log(err);
-        setErrorsAddress(err.response.data.errors);
       });
   };
 
@@ -83,6 +75,13 @@ const AddressPaymentPage = () => {
   return (
     <Container>
       <h1 className="text-center my-4">Indirizzo di Spedizione</h1>
+      {addressEmpty && (
+        <div className="text-center mt-3">
+          <Alert variant="success" className="custom-alert">
+            <Alert.Heading>Inserisci un Indirizzo Valido</Alert.Heading>
+          </Alert>
+        </div>
+      )}
       {!showPage && (
         <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
           <div className="text-center">
@@ -188,7 +187,26 @@ const AddressPaymentPage = () => {
                 </Button>
               </Form>
               <div className="d-flex justify-content-end">
-                <Button id="first-button" type="submit" onClick={changeStepShopOrder}>
+                <Button
+                  id="first-button"
+                  type="submit"
+                  onClick={() => {
+                    if (
+                      address.phone !== "" &&
+                      address.street !== "" &&
+                      address.civic_number !== "" &&
+                      address.city !== "" &&
+                      address.postal_code !== ""
+                    ) {
+                      changeStepShopOrder();
+                    } else {
+                      setAddressEmpty(true);
+                      setTimeout(() => {
+                        setAddressEmpty(false);
+                      }, 1000);
+                    }
+                  }}
+                >
                   Prosegui
                 </Button>
               </div>
