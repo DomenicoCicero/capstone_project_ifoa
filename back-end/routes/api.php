@@ -41,6 +41,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post("/payment_method", [ShopOrderController::class, 'paymentMethod']);
     Route::post('/charge', [PaymentController::class, 'charge']);
     Route::get('/regain_shop_order', [ShopOrderController::class, 'regainShopOrder']);
+    Route::get('/orders', [ShopOrderController::class, 'getOrders']);
 
 
     // Route::post('/send-email', [ContactController::class, 'sendEmail']);

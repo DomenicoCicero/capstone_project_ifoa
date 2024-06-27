@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ShopOrder;
 use App\Http\Requests\StoreShopOrderRequest;
 use App\Http\Requests\UpdateShopOrderRequest;
+use App\Models\Address;
 use App\Models\CartItem;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
@@ -17,6 +18,10 @@ class ShopOrderController extends Controller
     {
         $user_id = Auth::user()->id;
         $shop_order_exist = ShopOrder::where('user_id', $user_id)->where('step', '<>', 'completed')->first();
+
+        $address = Address::where('user_id', $user_id)->first();
+        $address_id = $address->id;
+
         if($shop_order_exist) {
             OrderItem::where('shop_order_id', $shop_order_exist->id)->delete();
             $shop_order_exist->delete();
@@ -27,6 +32,7 @@ class ShopOrderController extends Controller
             $shop_order->total_price = $request->total_price;
             $shop_order->discounted = $request->discounted;
             $shop_order->total_price_discounted	= $request->total_price_discounted;
+            $shop_order->address_id = $address_id;
             $shop_order->save();
 
             $cart_items = $request->cart_items;
@@ -126,6 +132,16 @@ class ShopOrderController extends Controller
         return response()->json([
             'message' => 'Ordine ripreso',
             'next_step' => $shop_order_step,
+        ]);
+    }
+
+    public function getOrders()
+    {
+        $user_id = Auth::user()->id;
+        $shop_orders = ShopOrder::with('order_items', 'order_items.product')->where('user_id', $user_id)->where('step', '=', 'completed')->get()->all();
+
+        return response()->json([
+            'data' => $shop_orders,
         ]);
     }
 

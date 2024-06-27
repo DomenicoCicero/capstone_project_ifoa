@@ -39,7 +39,7 @@ const UserDropdown = () => {
       </Dropdown.Toggle>
       <Dropdown.Menu className="dropdown-menu-end ">
         <Dropdown.Item onClick={() => navigate("/account")}>Dati personali</Dropdown.Item>
-        <Dropdown.Item href="#/action-1">I miei ordini</Dropdown.Item>
+        <Dropdown.Item onClick={() => navigate("/orders")}>I miei ordini</Dropdown.Item>
         <Dropdown.Item onClick={() => navigate("/prefer")}>Preferiti</Dropdown.Item>
         <div className="dropdown-divider"></div>
 

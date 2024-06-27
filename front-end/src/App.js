@@ -26,6 +26,9 @@ import AddressPaymentPage from "./pages/AddressPaymentPage";
 import PaymentMethodPage from "./pages/PaymentMethodPage";
 import OrderCompletedPage from "./pages/OrderCompletedPage";
 import PaymentPage from "./pages/PaymentPage";
+import OrdersPage from "./pages/OrdersPage";
+import GuestRoutes from "./components/GuestRoutes";
+import NoAuthRoutes from "./components/NoAuthRoutes";
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -49,20 +52,25 @@ function App() {
         <div className="container">
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/products" element={<ProductsPage />} />
-            <Route path="/products/:id" element={<ProductDetails />} />
-            <Route path="/prefer" element={<PreferPage />} />
-            <Route path="/account" element={<AccountPage />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/delivery_method_page" element={<DeliveryMethodPage />} />
-            <Route path="/address_payment_page" element={<AddressPaymentPage />} />
-            <Route path="/payment_method_page" element={<PaymentMethodPage />} />
-            <Route path="/payment_page" element={<PaymentPage />} />
-            <Route path="/completed" element={<OrderCompletedPage />} />
-            <Route path="/about" element={<AboutUs />} />
-            <Route path="/contacts" element={<Contacts />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route element={<GuestRoutes />}>
+              <Route path="/products" element={<ProductsPage />} />
+              <Route path="/products/:id" element={<ProductDetails />} />
+              <Route path="/prefer" element={<PreferPage />} />
+              <Route path="/account" element={<AccountPage />} />
+              <Route path="/orders" element={<OrdersPage />} />
+              <Route path="/cart" element={<CartPage />} />
+              <Route path="/delivery_method_page" element={<DeliveryMethodPage />} />
+              <Route path="/address_payment_page" element={<AddressPaymentPage />} />
+              <Route path="/payment_method_page" element={<PaymentMethodPage />} />
+              <Route path="/payment_page" element={<PaymentPage />} />
+              <Route path="/completed" element={<OrderCompletedPage />} />
+              <Route path="/about" element={<AboutUs />} />
+              <Route path="/contacts" element={<Contacts />} />
+            </Route>
+            <Route element={<NoAuthRoutes />}>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+            </Route>
           </Routes>
         </div>
         <MyFooter />
