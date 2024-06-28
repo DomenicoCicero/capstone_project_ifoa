@@ -42,7 +42,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/charge', [PaymentController::class, 'charge']);
     Route::get('/regain_shop_order', [ShopOrderController::class, 'regainShopOrder']);
     Route::get('/orders', [ShopOrderController::class, 'getOrders']);
-
+    
+    Route::post('/admin/created-category', [CategoryController::class, 'adminCreateNewCategory']);
+    Route::put('/admin/update-category/{id}', [CategoryController::class, 'adminUpdateNewCategory']);
+    Route::put('/admin/disable-category/{id}', [CategoryController::class, 'adminDisableCategory']);
+    Route::put('/admin/available-category/{id}', [CategoryController::class, 'adminAvailableCategory']);
 
     // Route::post('/send-email', [ContactController::class, 'sendEmail']);
 

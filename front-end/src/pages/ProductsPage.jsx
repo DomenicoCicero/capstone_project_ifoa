@@ -88,7 +88,8 @@ const ProductsPage = () => {
       })
       .then(data => {
         console.log(data);
-        setCategories(data);
+        let categoriesAvailable = data.filter(item => item.available === 1);
+        setCategories(categoriesAvailable);
       })
       .catch(err => {
         console.log(err);

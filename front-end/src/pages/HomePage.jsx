@@ -42,7 +42,8 @@ const HomePage = () => {
       })
       .then(data => {
         console.log(data);
-        createdArrayOfObjCategories(data);
+        let categoriesAvailable = data.filter(item => item.available === 1);
+        createdArrayOfObjCategories(categoriesAvailable);
       })
       .catch(err => {
         console.log(err);

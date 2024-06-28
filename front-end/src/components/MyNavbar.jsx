@@ -48,6 +48,11 @@ const MyNavbar = () => {
               <Link to={"/contacts"} className=" ms-2 nav-link">
                 CONTATTI
               </Link>
+              {user && user.role === "admin" && (
+                <Link to={"/admin_page"} className=" ms-2 nav-link">
+                  ADMIN
+                </Link>
+              )}
               {/* SOLO nel menu mobile e tablet */}
               {user && (
                 <Container className="show-on-mobile px-2 mt-4">
