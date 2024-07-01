@@ -47,6 +47,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/admin/update-category/{id}', [CategoryController::class, 'adminUpdateNewCategory']);
     Route::put('/admin/disable-category/{id}', [CategoryController::class, 'adminDisableCategory']);
     Route::put('/admin/available-category/{id}', [CategoryController::class, 'adminAvailableCategory']);
+    Route::post('/admin/created-product', [ProductController::class, 'adminCreatedNewProduct']);
+    Route::put('/admin/update-product/{id}', [ProductController::class, 'adminUpdateProduct']);
+    Route::put('/admin/disable-product/{id}', [ProductController::class, 'adminDisableProduct']);
+    Route::put('/admin/available-product/{id}', [ProductController::class, 'adminAvailableProduct']);
 
     // Route::post('/send-email', [ContactController::class, 'sendEmail']);
 

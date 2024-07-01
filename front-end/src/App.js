@@ -30,6 +30,7 @@ import OrdersPage from "./pages/OrdersPage";
 import GuestRoutes from "./components/GuestRoutes";
 import NoAuthRoutes from "./components/NoAuthRoutes";
 import AdminPage from "./pages/AdminPage";
+import AdminRoutes from "./components/AdminRoutes";
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -72,7 +73,9 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
             </Route>
-            <Route path="/admin_page" element={<AdminPage />} />
+            <Route element={<AdminRoutes />}>
+              <Route path="/admin_page" element={<AdminPage />} />
+            </Route>
           </Routes>
         </div>
         <MyFooter />

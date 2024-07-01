@@ -67,7 +67,7 @@ const ProductsPage = () => {
       })
       .then(data => {
         console.log(data);
-        setProducts(data.data.data);
+        setProducts(data.data.data.filter(item => item.available === 1));
         setTotalPages(data.data.last_page);
         dispatch(getProductsIdsPrefer(data.preferProductIdArr));
         setShow(false);

@@ -174,6 +174,111 @@ class ProductController extends Controller
         ], 200);
     }
 
+    public function adminCreatedNewProduct(Request $request)
+    {
+        $user = Auth::user();
+        if($user->role === "admin") {
+            $product = new Product();
+            $product->name = $request->name;
+            $product->description = $request->description;
+            $product->price = $request->price;
+            $product->discounted = $request->discounted;
+            if($request->discounted === false) {
+                $product->price_discounted = null;
+            } else {
+                $product->price_discounted = $request->price_discounted;
+            }
+            $product->stock_quantity = $request->stock_quantity;
+            $product->ingredients = $request->ingredients;
+            $product->image_url = $request->image_url;
+            $product->available = true;
+            $product->category_id = $request->category_id;
+            $product->save();
+
+            return response()->json([
+                'message' => 'Prodotto creato con successo'
+            ], 200);
+
+        } else {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+    }
+
+    public function adminUpdateProduct(Request $request, $id)
+    {
+        $user = Auth::user();
+        if($user->role === "admin") {
+            $product = Product::where('id', $id)->first();
+
+            $product->name = $request->name;
+            $product->description = $request->description;
+            $product->price = $request->price;
+            $product->discounted = $request->discounted;
+            if($request->discounted === false) {
+                $product->price_discounted = null;
+            } else {
+                $product->price_discounted = $request->price_discounted;
+            }
+            $product->stock_quantity = $request->stock_quantity;
+            $product->ingredients = $request->ingredients;
+            $product->image_url = $request->image_url;
+            $product->available = true;
+            $product->category_id = $request->category_id;
+            $product->save();
+
+            return response()->json([
+                'message' => 'Prodotto modoficato con successo'
+            ], 200);
+
+        } else {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+    }
+
+    public function adminDisableProduct($id)
+    {
+        $user = Auth::user();
+        if($user->role === "admin") {
+            $product = Product::where('id', $id)->first();
+
+            $product->available = false;
+            $product->save();
+
+            return response()->json([
+                'message' => 'Prodotto reso non disponibile'
+            ], 200);
+
+        } else {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+    }
+
+    public function adminAvailableProduct($id)
+    {
+        $user = Auth::user();
+        if($user->role === "admin") {
+            $product = Product::where('id', $id)->first();
+
+            $product->available = true;
+            $product->save();
+
+            return response()->json([
+                'message' => 'Prodotto reso disponibile'
+            ], 200);
+
+        } else {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+    }
+
 
     /**
      * Show the form for creating a new resource.

@@ -20,7 +20,8 @@ return new class extends Migration
             $table->decimal('price_discounted', 10, 2)->nullable();
             $table->integer('stock_quantity')->nullable();
             $table->text('ingredients')->nullable();
-            $table->string('image_url')->nullable();
+            $table->text('image_url')->nullable();
+            $table->boolean('available')->default(true);
             $table->foreignId('category_id')->nullable()->constrained();
         });
     }

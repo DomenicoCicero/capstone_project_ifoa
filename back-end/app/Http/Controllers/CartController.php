@@ -18,6 +18,7 @@ class CartController extends Controller
      {
         $user_id = Auth::user()->id;
 
+        if(Auth::user()->role !== "admin") {
         $cart = Cart::where('user_id', $user_id)->first();
         $cart_id = $cart->id;
 
@@ -32,6 +33,11 @@ class CartController extends Controller
         return response()->json([
             'quantity' => $quantity,
         ]);
+    } else {
+        return response()->json([
+            'quantity' => 0,
+        ]);
+    }
      }
 
     public function index()

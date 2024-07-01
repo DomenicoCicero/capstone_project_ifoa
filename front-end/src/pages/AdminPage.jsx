@@ -37,7 +37,9 @@ const AdminPage = () => {
   const [alertUpdatecategory, setAlertUpdateCategory] = useState(false);
   const [alertDisablecategory, setAlertDisableCategory] = useState(false);
   const [alertAvailablecategory, setAlertAvailableCategory] = useState(false);
+  const [alertNewProduct, setAlertNewProduct] = useState(false);
   const [load, setLoad] = useState(true);
+  const [errorsProduct, setErrorsProduct] = useState(null);
 
   const [newProduct, setnewProduct] = useState({
     name: "",
@@ -144,6 +146,23 @@ const AdminPage = () => {
       });
   };
 
+  const createdNewProduct = e => {
+    e.preventDefault();
+    axios
+      .post(`/api/admin/created-product`, newProduct)
+      .then(data => {
+        console.log(data);
+        setAlertNewProduct(true);
+        setTimeout(() => {
+          setAlertNewProduct(false);
+        }, 1000);
+      })
+      .catch(err => {
+        console.log(err);
+        setErrorsProduct(err.response.data.errors);
+      });
+  };
+
   useEffect(() => {
     getAllCategories();
   }, [load]);
@@ -154,7 +173,14 @@ const AdminPage = () => {
         <Tabs defaultActiveKey="orders-pending" id="uncontrolled-tab-example" className="mb-3">
           <Tab eventKey="product" title="Aggiungi Prodotto">
             <h3 className="text-center my-2">Aggiungi Prodotto</h3>
-            <Form>
+            {alertNewProduct && (
+              <div className="text-center mt-3">
+                <Alert variant="success" className="custom-alert">
+                  <Alert.Heading>Prodotto Creato con successo</Alert.Heading>
+                </Alert>
+              </div>
+            )}
+            <Form onSubmit={createdNewProduct}>
               <Form.Group className="mb-3" controlId="formBasicNameProduct">
                 <Form.Label>Nome Prodotto</Form.Label>
                 <Form.Control
@@ -168,6 +194,9 @@ const AdminPage = () => {
                   }}
                   value={newProduct.name}
                 />
+                {errorsProduct && errorsProduct.name && (
+                  <div className="error text-danger d-block">{errorsProduct.name}</div>
+                )}
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicDescriptionProduct">
                 <Form.Label>Descrizione</Form.Label>
@@ -181,6 +210,9 @@ const AdminPage = () => {
                   }}
                   value={newProduct.description}
                 />
+                {errorsProduct && errorsProduct.description && (
+                  <div className="error text-danger d-block">{errorsProduct.description}</div>
+                )}
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicPriceProduct">
                 <Form.Label>Prezzo</Form.Label>
@@ -195,10 +227,12 @@ const AdminPage = () => {
                   }}
                   value={newProduct.price}
                 />
+                {errorsProduct && errorsProduct.price && (
+                  <div className="error text-danger d-block">{errorsProduct.price}</div>
+                )}
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicDiscounted">
                 <Form.Check
-                  required
                   type="checkbox"
                   label="Scontato"
                   onChange={e => {
@@ -223,6 +257,9 @@ const AdminPage = () => {
                   value={newProduct.price_discounted}
                   disabled={!newProduct.discounted}
                 />
+                {errorsProduct && errorsProduct.price_discounted && (
+                  <div className="error text-danger d-block">{errorsProduct.price_discounted}</div>
+                )}
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicStockQuantityProduct">
                 <Form.Label>Quantità in Negozio</Form.Label>
@@ -236,6 +273,9 @@ const AdminPage = () => {
                   }}
                   value={newProduct.stock_quantity}
                 />
+                {errorsProduct && errorsProduct.stock_quantity && (
+                  <div className="error text-danger d-block">{errorsProduct.stock_quantity}</div>
+                )}
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicIngredientsProduct">
                 <Form.Label>Ingredienti</Form.Label>
@@ -249,6 +289,9 @@ const AdminPage = () => {
                   }}
                   value={newProduct.ingredients}
                 />
+                {errorsProduct && errorsProduct.ingredients && (
+                  <div className="error text-danger d-block">{errorsProduct.ingredients}</div>
+                )}
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicImageUrlProduct">
                 <Form.Label>Immagine</Form.Label>
@@ -262,6 +305,9 @@ const AdminPage = () => {
                   }}
                   value={newProduct.image_url}
                 />
+                {errorsProduct && errorsProduct.image_url && (
+                  <div className="error text-danger d-block">{errorsProduct.image_url}</div>
+                )}
               </Form.Group>
               <Form.Select
                 aria-label="Default select example"
@@ -273,6 +319,9 @@ const AdminPage = () => {
                 }}
                 value={newProduct.category_id || ""}
               >
+                {errorsProduct && errorsProduct.category_id && (
+                  <div className="error text-danger d-block">{errorsProduct.category_id}</div>
+                )}
                 <option value="" disabled>
                   Seleziona Categoria
                 </option>

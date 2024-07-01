@@ -11,7 +11,7 @@ const productsReducers = (state = initialState, action) => {
     case GET_PRODUCTS:
       return {
         ...state,
-        products: action.payload.data,
+        products: action.payload.data.filter(item => item.available === 1),
         productsIdPrefer: action.payload.preferProductIdArr,
       };
     case GET_PRODUCTS_IDS_PREFER_ARRAY:
