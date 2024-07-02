@@ -142,7 +142,93 @@ class ShopOrderController extends Controller
 
         return response()->json([
             'data' => $shop_orders,
-        ]);
+        ], 200);
+    }
+
+    public function adminGetShopOrderPending()
+    {
+        $user = Auth::user();
+        if($user->role === "admin") {
+            $shop_orders = ShopOrder::with('order_items', 'order_items.product', 'user')->where('status', '<>', 'completed')->get()->all();
+
+            return response()->json([
+                'data' => $shop_orders,
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Unauthorized',
+            ]);
+        }
+    }
+
+    public function adminGetShopOrderCompleted()
+    {
+        $user = Auth::user();
+        if($user->role === "admin") {
+            $shop_orders = ShopOrder::with('order_items', 'order_items.product', 'user')->where('status', '=', 'completed')->get()->all();
+
+            return response()->json([
+                'data' => $shop_orders,
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Unauthorized',
+            ]);
+        }
+    }
+
+    public function adminEditStatusDelivered($id)
+    {
+        $user = Auth::user();
+        if($user->role === "admin") {
+            $shop_order = ShopOrder::where('id', $id)->first();
+            $shop_order->status = 'delivered';
+            $shop_order->save();
+
+            return response()->json([
+                'message' => "Status prodotto Spedito",
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Unauthorized',
+            ]);
+        }
+    }
+
+    public function adminEditStatusReadyInStore($id)
+    {
+        $user = Auth::user();
+        if($user->role === "admin") {
+            $shop_order = ShopOrder::where('id', $id)->first();
+            $shop_order->status = 'ready_in_store';
+            $shop_order->save();
+
+            return response()->json([
+                'message' => "Status prodotto Pronto In Negozio",
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Unauthorized',
+            ]);
+        }
+    }
+
+    public function adminEditStatusCompleted($id)
+    {
+        $user = Auth::user();
+        if($user->role === "admin") {
+            $shop_order = ShopOrder::where('id', $id)->first();
+            $shop_order->status = 'completed';
+            $shop_order->save();
+
+            return response()->json([
+                'message' => "Status prodotto Completato",
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Unauthorized',
+            ]);
+        }
     }
 
     /**

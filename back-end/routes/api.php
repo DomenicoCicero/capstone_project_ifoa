@@ -51,6 +51,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/admin/update-product/{id}', [ProductController::class, 'adminUpdateProduct']);
     Route::put('/admin/disable-product/{id}', [ProductController::class, 'adminDisableProduct']);
     Route::put('/admin/available-product/{id}', [ProductController::class, 'adminAvailableProduct']);
+    Route::get('/admin/shop_order_pending', [ShopOrderController::class, 'adminGetShopOrderPending']);
+    Route::get('/admin/shop_order_completed', [ShopOrderController::class, 'adminGetShopOrderCompleted']);
+    Route::put('/admin/shop_order_status_delivered/{id}', [ShopOrderController::class, 'adminEditStatusDelivered']);
+    Route::put('/admin/shop_order_status_ready_in_store/{id}', [ShopOrderController::class, 'adminEditStatusReadyInStore']);
+    Route::put('/admin/shop_order_status_completed/{id}', [ShopOrderController::class, 'adminEditStatusCompleted']);
 
     // Route::post('/send-email', [ContactController::class, 'sendEmail']);
 
